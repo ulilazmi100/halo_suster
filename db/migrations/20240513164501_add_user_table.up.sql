@@ -2,11 +2,11 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE users (
     id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    nip BIGINT NOT NULL,
+    nip VARCHAR(20) NOT NULL,
     name VARCHAR(50) NOT NULL,
-    password_hash VARCHAR(100) NOT NULL,
+    password_hash VARCHAR(100),
     role VARCHAR(20) NOT NULL, -- IT, nurse, etc.
-    identity_card_scan_img TEXT NOT NULL,
+    identity_card_scan_img TEXT,
     access BOOLEAN NOT NULL DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
