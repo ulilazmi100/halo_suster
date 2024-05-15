@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	configs "halo_suster/cfg"
+	"halo_suster/responses"
 )
 
 type Server struct {
@@ -18,6 +19,7 @@ type Server struct {
 func NewServer(db *pgxpool.Pool) *Server {
 	// Create an Echo instance
 	app := echo.New()
+	app.HTTPErrorHandler = responses.ErrorHandler
 
 	// Initialize validator
 	validate := validator.New()
@@ -26,11 +28,13 @@ func NewServer(db *pgxpool.Pool) *Server {
 	app.Use(middleware.Logger())
 	app.Use(middleware.CORS())
 	app.Use(middleware.Recover())
+
 	return &Server{
 		dbPool:    db,
 		app:       app,
 		validator: validate,
 	}
+
 }
 
 func (s *Server) Run(config configs.Config) {
