@@ -31,8 +31,8 @@ func NewPgConn(config configs.Config) (*pgxpool.Pool, error) {
 	dbconfig.MaxConnLifetime = 1 * time.Hour
 	dbconfig.MaxConnIdleTime = 30 * time.Minute
 	dbconfig.HealthCheckPeriod = 5 * time.Second
-	dbconfig.MaxConns = 25 // Adjust based on your needs
-	dbconfig.MinConns = 5  // Adjust based on your needs
+	dbconfig.MaxConns = 50 // Adjust based on your database and workload
+	dbconfig.MinConns = 10 // Adjust based on your database and workload
 
 	// Create a new connection pool with the configuration
 	pool, err := pgxpool.NewWithConfig(ctx, dbconfig)

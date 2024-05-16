@@ -19,6 +19,25 @@ func NewUserController(svc svc.UserSvc) *UserController {
 	return &UserController{svc: svc}
 }
 
+type registerResponse struct {
+	UserId      string `json:"userId"`
+	Nip         string `json:"nip"`
+	Name        string `json:"name"`
+	AccessToken string `json:"accessToken"`
+}
+
+type loginResponse struct {
+	UserId      string `json:"userId"`
+	Nip         string `json:"nip"`
+	Name        string `json:"name"`
+	AccessToken string `json:"accessToken"`
+}
+
+type simpleResponse struct {
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+}
+
 func (c *UserController) Register(ctx echo.Context) error {
 	var newUser entities.RegistrationPayload
 	if err := ctx.Bind(&newUser); err != nil {
@@ -30,16 +49,16 @@ func (c *UserController) Register(ctx echo.Context) error {
 		return err
 	}
 
-	respData := map[string]interface{}{
-		"userId":      userId,
-		"nip":         newUser.Nip,
-		"name":        newUser.Name,
-		"accessToken": accessToken,
+	respData := registerResponse{
+		UserId:      userId,
+		Nip:         newUser.Nip,
+		Name:        newUser.Name,
+		AccessToken: accessToken,
 	}
 
-	return ctx.JSON(http.StatusCreated, map[string]interface{}{
-		"message": "User registered successfully",
-		"data":    respData,
+	return ctx.JSON(http.StatusCreated, simpleResponse{
+		Message: "User registered successfully",
+		Data:    respData,
 	})
 }
 
@@ -49,7 +68,6 @@ func (c *UserController) Login(ctx echo.Context) error {
 		return responses.NewBadRequestError(err.Error())
 	}
 
-	// Set a timeout for the context
 	requestCtx, cancel := context.WithTimeout(ctx.Request().Context(), 10*time.Second)
 	defer cancel()
 
@@ -63,16 +81,16 @@ func (c *UserController) Login(ctx echo.Context) error {
 		return err
 	}
 
-	respData := map[string]interface{}{
-		"userId":      userId,
-		"nip":         user.Nip,
-		"name":        name,
-		"accessToken": accessToken,
+	respData := loginResponse{
+		UserId:      userId,
+		Nip:         user.Nip,
+		Name:        name,
+		AccessToken: accessToken,
 	}
 
-	return ctx.JSON(http.StatusOK, map[string]interface{}{
-		"message": "User logged in successfully",
-		"data":    respData,
+	return ctx.JSON(http.StatusOK, simpleResponse{
+		Message: "User logged in successfully",
+		Data:    respData,
 	})
 }
 
@@ -87,15 +105,15 @@ func (c *UserController) NurseRegister(ctx echo.Context) error {
 		return err
 	}
 
-	respData := map[string]interface{}{
-		"userId": userId,
-		"nip":    newUser.Nip,
-		"name":   newUser.Name,
+	respData := registerResponse{
+		UserId: userId,
+		Nip:    newUser.Nip,
+		Name:   newUser.Name,
 	}
 
-	return ctx.JSON(http.StatusCreated, map[string]interface{}{
-		"message": "User registered successfully",
-		"data":    respData,
+	return ctx.JSON(http.StatusCreated, simpleResponse{
+		Message: "User registered successfully",
+		Data:    respData,
 	})
 }
 
@@ -105,7 +123,6 @@ func (c *UserController) NurseLogin(ctx echo.Context) error {
 		return responses.NewBadRequestError(err.Error())
 	}
 
-	// Set a timeout for the context
 	requestCtx, cancel := context.WithTimeout(ctx.Request().Context(), 10*time.Second)
 	defer cancel()
 
@@ -119,16 +136,16 @@ func (c *UserController) NurseLogin(ctx echo.Context) error {
 		return err
 	}
 
-	respData := map[string]interface{}{
-		"userId":      userId,
-		"nip":         user.Nip,
-		"name":        name,
-		"accessToken": accessToken,
+	respData := loginResponse{
+		UserId:      userId,
+		Nip:         user.Nip,
+		Name:        name,
+		AccessToken: accessToken,
 	}
 
-	return ctx.JSON(http.StatusOK, map[string]interface{}{
-		"message": "User logged in successfully",
-		"data":    respData,
+	return ctx.JSON(http.StatusOK, simpleResponse{
+		Message: "User logged in successfully",
+		Data:    respData,
 	})
 }
 
@@ -139,12 +156,10 @@ func (c *UserController) NurseUpdate(ctx echo.Context) error {
 		return responses.NewBadRequestError(err.Error())
 	}
 
-	// Set a timeout for the context
 	requestCtx, cancel := context.WithTimeout(ctx.Request().Context(), 10*time.Second)
 	defer cancel()
 
-	err := c.svc.UpdateNurse(requestCtx, id, updatePayload)
-	if err != nil {
+	if err := c.svc.UpdateNurse(requestCtx, id, updatePayload); err != nil {
 		return err
 	}
 
@@ -154,12 +169,10 @@ func (c *UserController) NurseUpdate(ctx echo.Context) error {
 func (c *UserController) NurseDelete(ctx echo.Context) error {
 	id := ctx.Param("userId")
 
-	// Set a timeout for the context
 	requestCtx, cancel := context.WithTimeout(ctx.Request().Context(), 10*time.Second)
 	defer cancel()
 
-	err := c.svc.DeleteNurse(requestCtx, id)
-	if err != nil {
+	if err := c.svc.DeleteNurse(requestCtx, id); err != nil {
 		return err
 	}
 
@@ -168,17 +181,15 @@ func (c *UserController) NurseDelete(ctx echo.Context) error {
 
 func (c *UserController) NurseAccess(ctx echo.Context) error {
 	id := ctx.Param("userId")
-	var acessPayload entities.NurseAccessPayload
-	if err := ctx.Bind(&acessPayload); err != nil {
+	var accessPayload entities.NurseAccessPayload
+	if err := ctx.Bind(&accessPayload); err != nil {
 		return responses.NewBadRequestError(err.Error())
 	}
 
-	// Set a timeout for the context
 	requestCtx, cancel := context.WithTimeout(ctx.Request().Context(), 10*time.Second)
 	defer cancel()
 
-	err := c.svc.AccessNurse(requestCtx, id, acessPayload)
-	if err != nil {
+	if err := c.svc.AccessNurse(requestCtx, id, accessPayload); err != nil {
 		return err
 	}
 
@@ -199,7 +210,6 @@ func (c *UserController) GetUser(ctx echo.Context) error {
 		return responses.NewBadRequestError("invalid query param")
 	}
 
-	// Set a timeout for the context
 	requestCtx, cancel := context.WithTimeout(ctx.Request().Context(), 10*time.Second)
 	defer cancel()
 
@@ -209,14 +219,14 @@ func (c *UserController) GetUser(ctx echo.Context) error {
 	}
 
 	if len(resp) == 0 {
-		return ctx.JSON(http.StatusOK, map[string]interface{}{
-			"message": "success",
-			"data":    []interface{}{},
+		return ctx.JSON(http.StatusOK, simpleResponse{
+			Message: "success",
+			Data:    []interface{}{},
 		})
 	}
 
-	return ctx.JSON(http.StatusOK, map[string]interface{}{
-		"message": "success",
-		"data":    resp,
+	return ctx.JSON(http.StatusOK, simpleResponse{
+		Message: "success",
+		Data:    resp,
 	})
 }

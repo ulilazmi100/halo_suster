@@ -146,7 +146,6 @@ func (u *NurseUpdatePayload) Validate() error {
 		validation.Field(&u.Nip,
 			validation.Required.Error("nip is required"),
 			validation.Length(13, 13).Error("nip number must be 13 characters"),
-			validation.By(ValidateNurseNipFormat),
 		),
 		validation.Field(&u.Name,
 			validation.Required.Error("name is required"),
