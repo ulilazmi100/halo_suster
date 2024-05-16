@@ -22,10 +22,10 @@ type Config struct {
 	BcryptSalt int
 
 	//s3 to upload, all uploaded files will available just for only a day
-	S3_ID          string
-	S3_SECRET_KEY  string
-	S3_BUCKET_NAME string
-	S3_REGION      string
+	AWS_ACCESS_KEY_ID     string
+	AWS_SECRET_ACCESS_KEY string
+	AWS_S3_BUCKET_NAME    string
+	AWS_REGION            string
 }
 
 var (
@@ -55,10 +55,10 @@ func LoadConfig() (Config, error) {
 
 			JWTSecret: GetEnvOrDefault("JWT_SECRET", "sec"),
 
-			S3_ID:          GetEnvOrDefault("S3_ID", ""),
-			S3_SECRET_KEY:  GetEnvOrDefault("S3_SECRET_KEY", ""),
-			S3_BUCKET_NAME: GetEnvOrDefault("S3_BUCKET_NAME", ""),
-			S3_REGION:      GetEnvOrDefault("S3_REGION", ""),
+			AWS_ACCESS_KEY_ID:     GetEnvOrDefault("AWS_ACCESS_KEY_ID", ""),
+			AWS_SECRET_ACCESS_KEY: GetEnvOrDefault("AWS_SECRET_ACCESS_KEY", ""),
+			AWS_S3_BUCKET_NAME:    GetEnvOrDefault("AWS_S3_BUCKET_NAME", ""),
+			AWS_REGION:            GetEnvOrDefault("AWS_REGION", ""),
 		}
 
 		config.BcryptSalt, err = strconv.Atoi(GetEnvOrDefault("BCRYPT_SALT", "10"))
