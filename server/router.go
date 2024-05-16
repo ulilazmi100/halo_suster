@@ -34,6 +34,14 @@ func registerUserRoute(r *echo.Group, db *pgxpool.Pool) {
 	newRouteWithItAuth(userGroup, "GET", "/", ctr.GetUser)
 }
 
+func registerPatientRoute(r *echo.Group, db *pgxpool.Pool) {
+	ctr := controller.NewPatientController(svc.NewPatientSvc(repo.NewPatientRepo(db)))
+	patientGroup := r.Group("/medical/patient")
+
+	newRouteWithAuth(patientGroup, "POST", "/", ctr.RegisterPatient)
+	newRouteWithAuth(patientGroup, "GET", "/", ctr.GetPatient)
+}
+
 func newRoute(router *echo.Group, method, path string, handler echo.HandlerFunc) {
 	router.Add(method, path, handler)
 }

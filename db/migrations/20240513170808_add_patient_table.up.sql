@@ -1,6 +1,6 @@
 CREATE TABLE patients (
     id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    identity_number BIGINT NOT NULL UNIQUE,
+    identity_number BIGINT NOT NULL,
     phone_number VARCHAR(15) NOT NULL,
     name VARCHAR(30) NOT NULL,
     birth_date DATE NOT NULL,
