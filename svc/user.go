@@ -228,7 +228,7 @@ func (s *userSvc) DeleteNurse(ctx context.Context, nurseId string) error {
 	}
 
 	if !strings.HasPrefix(user.Nip, "303") {
-		return responses.NewBadRequestError("userId is not a nurse (nip not starts with 303)")
+		return responses.NewNotFoundError("user is not a nurse (nip not starts with 303)")
 	}
 
 	res, err := s.repo.DeleteNurse(ctx, nurseId)
@@ -264,7 +264,7 @@ func (s *userSvc) AccessNurse(ctx context.Context, nurseId string, accessPayload
 	}
 
 	if !strings.HasPrefix(user.Nip, "303") {
-		return responses.NewBadRequestError("userId is not a nurse (nip not starts with 303)")
+		return responses.NewNotFoundError("user is not a nurse (nip not starts with 303)")
 	}
 
 	hashedPassword, err := crypto.GenerateHashedPassword(accessPayload.Password)
