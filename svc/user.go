@@ -76,10 +76,14 @@ func (s *userSvc) Register(ctx context.Context, newUser entities.RegistrationPay
 }
 
 func (s *userSvc) Login(ctx context.Context, creds entities.Credential) (string, string, string, error) {
+	if strings.HasPrefix(creds.Nip, "303") {
+		return "", "", "", responses.NewNotFoundError("user is not from IT (nip not starts with 615)")
+	}
+
 	err := entities.ValidateITStaffNipFormat(creds.Nip)
 
 	if err != nil {
-		return "", "", "", responses.NewNotFoundError("User not found")
+		return "", "", "", responses.NewBadRequestError(err.Error())
 	}
 
 	if err := creds.Validate(); err != nil {
@@ -132,10 +136,14 @@ func (s *userSvc) NurseRegister(ctx context.Context, newUser entities.NurseRegis
 }
 
 func (s *userSvc) NurseLogin(ctx context.Context, creds entities.Credential) (string, string, string, error) {
+	if strings.HasPrefix(creds.Nip, "615") {
+		return "", "", "", responses.NewNotFoundError("user is not from nurse (nip not starts with 303)")
+	}
+
 	err := entities.ValidateNurseNipFormat(creds.Nip)
 
 	if err != nil {
-		return "", "", "", responses.NewNotFoundError("User not found")
+		return "", "", "", responses.NewBadRequestError(err.Error())
 	}
 
 	if err := creds.Validate(); err != nil {
