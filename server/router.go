@@ -1,20 +1,27 @@
 package server
 
 import (
+	"context"
+	configs "halo_suster/cfg"
 	"halo_suster/controller"
 	"halo_suster/middleware"
 	"halo_suster/repo"
 	"halo_suster/svc"
 
+	"log"
+
+	awsCfg "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/labstack/echo/v4"
 )
 
-func (s *Server) RegisterRoute() {
+func (s *Server) RegisterRoute(config configs.Config) {
 	mainRoute := s.app.Group("/v1")
 
 	registerUserRoute(mainRoute, s.dbPool)
 	registerMedicalRoute(mainRoute, s.dbPool)
+	registerImageRoute(mainRoute, config)
 }
 
 func registerUserRoute(r *echo.Group, db *pgxpool.Pool) {
@@ -45,7 +52,33 @@ func registerMedicalRoute(r *echo.Group, db *pgxpool.Pool) {
 	recordGroup := r.Group("/medical/record")
 	newRouteWithAuth(recordGroup, "POST", "/", ctr.RegisterRecord)
 	newRouteWithAuth(recordGroup, "GET", "/", ctr.GetRecord)
+}
 
+func registerImageRoute(r *echo.Group, config configs.Config) {
+	bucket := config.AWS_S3_BUCKET_NAME
+
+	// Load AWS configuration
+	cfg, err := awsCfg.LoadDefaultConfig(
+		context.Background(),
+		awsCfg.WithRegion("ap-southeast-1"),
+		awsCfg.WithCredentialsProvider(
+			credentials.NewStaticCredentialsProvider(
+				config.AWS_ACCESS_KEY_ID,
+				config.AWS_SECRET_ACCESS_KEY,
+				"",
+			),
+		),
+	)
+	if err != nil {
+		log.Fatalf("failed to load AWS config: %v", err)
+	}
+
+	// Initialize the image service and controller
+	imageService := svc.NewImageSvc(cfg, bucket)
+	imageController := controller.NewImageController(imageService)
+
+	// Register the route with authentication middleware
+	newRouteWithAuth(r, "POST", "/image", imageController.UploadImage)
 }
 
 func newRoute(router *echo.Group, method, path string, handler echo.HandlerFunc) {

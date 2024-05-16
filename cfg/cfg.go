@@ -57,8 +57,8 @@ func LoadConfig() (Config, error) {
 
 			AWS_ACCESS_KEY_ID:     GetEnvOrDefault("AWS_ACCESS_KEY_ID", ""),
 			AWS_SECRET_ACCESS_KEY: GetEnvOrDefault("AWS_SECRET_ACCESS_KEY", ""),
-			AWS_S3_BUCKET_NAME:    GetEnvOrDefault("AWS_S3_BUCKET_NAME", ""),
-			AWS_REGION:            GetEnvOrDefault("AWS_REGION", ""),
+			AWS_S3_BUCKET_NAME:    GetEnvOrDefault("AWS_S3_BUCKET_NAME", "projectsprint-bucket-public-read"),
+			AWS_REGION:            GetEnvOrDefault("AWS_REGION", "ap-southeast-1"),
 		}
 
 		config.BcryptSalt, err = strconv.Atoi(GetEnvOrDefault("BCRYPT_SALT", "10"))

@@ -23,7 +23,7 @@ func main() {
 
 	s := server.NewServer(dbPool)
 
-	s.RegisterRoute()
+	s.RegisterRoute(config)
 
 	s.Run(config)
 }
