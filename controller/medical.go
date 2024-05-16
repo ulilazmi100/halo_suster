@@ -11,15 +11,15 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type PatientController struct {
-	svc svc.PatientSvc
+type MedicalController struct {
+	svc svc.MedicalSvc
 }
 
-func NewPatientController(svc svc.PatientSvc) *PatientController {
-	return &PatientController{svc: svc}
+func NewMedicalController(svc svc.MedicalSvc) *MedicalController {
+	return &MedicalController{svc: svc}
 }
 
-func (c *PatientController) RegisterPatient(ctx echo.Context) error {
+func (c *MedicalController) RegisterPatient(ctx echo.Context) error {
 	var newPatient entities.PatientRegistrationPayload
 	if err := ctx.Bind(&newPatient); err != nil {
 		return responses.NewBadRequestError(err.Error())
@@ -33,7 +33,7 @@ func (c *PatientController) RegisterPatient(ctx echo.Context) error {
 	return ctx.NoContent(http.StatusCreated)
 }
 
-func (c *PatientController) GetPatient(ctx echo.Context) error {
+func (c *MedicalController) GetPatient(ctx echo.Context) error {
 	var patient entities.GetPatientQueries
 	if err := ctx.Bind(&patient); err != nil {
 		return responses.NewBadRequestError(err.Error())

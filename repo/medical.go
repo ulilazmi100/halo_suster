@@ -10,21 +10,21 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type PatientRepo interface {
+type MedicalRepo interface {
 	GetPatient(ctx context.Context, patientIdentityNumber int64) (string, error)
 	CreatePatient(ctx context.Context, patient *entities.PatientRegistrationPayload) error
 	GetPatients(ctx context.Context, filter entities.GetPatientQueries) ([]entities.GetPatientResponse, error)
 }
 
-type patientRepo struct {
+type medicalRepo struct {
 	db *pgxpool.Pool
 }
 
-func NewPatientRepo(db *pgxpool.Pool) PatientRepo {
-	return &patientRepo{db}
+func NewMedicalRepo(db *pgxpool.Pool) MedicalRepo {
+	return &medicalRepo{db}
 }
 
-func (r *patientRepo) GetPatient(ctx context.Context, patientIdentityNumber int64) (string, error) {
+func (r *medicalRepo) GetPatient(ctx context.Context, patientIdentityNumber int64) (string, error) {
 	var identityNumber string
 	query := "SELECT identity_number FROM patients WHERE identity_number = $1"
 
@@ -37,7 +37,7 @@ func (r *patientRepo) GetPatient(ctx context.Context, patientIdentityNumber int6
 	return identityNumber, nil
 }
 
-func (r *patientRepo) CreatePatient(ctx context.Context, patient *entities.PatientRegistrationPayload) error {
+func (r *medicalRepo) CreatePatient(ctx context.Context, patient *entities.PatientRegistrationPayload) error {
 	statement := "INSERT INTO patients (identity_number, phone_number, name, birth_date, gender, identity_card_scan_img) VALUES ($1, $2, $3, $4, $5, $6)"
 
 	_, err := r.db.Exec(ctx, statement, patient.IdentityNumber, patient.PhoneNumber, patient.Name, patient.BirthDate, patient.Gender, patient.IdentityCardScanImg)
@@ -48,7 +48,7 @@ func (r *patientRepo) CreatePatient(ctx context.Context, patient *entities.Patie
 	return nil
 }
 
-func (r *patientRepo) GetPatients(ctx context.Context, filter entities.GetPatientQueries) ([]entities.GetPatientResponse, error) {
+func (r *medicalRepo) GetPatients(ctx context.Context, filter entities.GetPatientQueries) ([]entities.GetPatientResponse, error) {
 	var patients []entities.GetPatientResponse
 	var createdAt time.Time
 	var birthDate time.Time

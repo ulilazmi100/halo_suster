@@ -9,20 +9,20 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-type PatientSvc interface {
+type MedicalSvc interface {
 	RegisterPatient(ctx context.Context, newPatient entities.PatientRegistrationPayload) error
 	GetPatient(ctx context.Context, GetPatientQueries entities.GetPatientQueries) ([]entities.GetPatientResponse, error)
 }
 
-type patientSvc struct {
-	repo repo.PatientRepo
+type medicalSvc struct {
+	repo repo.MedicalRepo
 }
 
-func NewPatientSvc(repo repo.PatientRepo) PatientSvc {
-	return &patientSvc{repo}
+func NewMedicalSvc(repo repo.MedicalRepo) MedicalSvc {
+	return &medicalSvc{repo}
 }
 
-func (s *patientSvc) RegisterPatient(ctx context.Context, newPatient entities.PatientRegistrationPayload) error {
+func (s *medicalSvc) RegisterPatient(ctx context.Context, newPatient entities.PatientRegistrationPayload) error {
 	if err := newPatient.Validate(); err != nil {
 		return responses.NewBadRequestError(err.Error())
 	}
@@ -46,7 +46,7 @@ func (s *patientSvc) RegisterPatient(ctx context.Context, newPatient entities.Pa
 	return nil
 }
 
-func (s *patientSvc) GetPatient(ctx context.Context, GetPatientQueries entities.GetPatientQueries) ([]entities.GetPatientResponse, error) {
+func (s *medicalSvc) GetPatient(ctx context.Context, GetPatientQueries entities.GetPatientQueries) ([]entities.GetPatientResponse, error) {
 
 	if GetPatientQueries.IdentityNumber != nil && entities.ValidateIdentityNumber(*GetPatientQueries.IdentityNumber) != nil {
 		return nil, nil

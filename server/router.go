@@ -14,6 +14,7 @@ func (s *Server) RegisterRoute() {
 	mainRoute := s.app.Group("/v1")
 
 	registerUserRoute(mainRoute, s.dbPool)
+	registerMedicalRoute(mainRoute, s.dbPool)
 }
 
 func registerUserRoute(r *echo.Group, db *pgxpool.Pool) {
