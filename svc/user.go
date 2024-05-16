@@ -168,10 +168,17 @@ func (s *userSvc) NurseLogin(ctx context.Context, creds entities.Credential) (st
 }
 
 func (s *userSvc) UpdateNurse(ctx context.Context, nurseId string, updatePayload entities.NurseUpdatePayload) error {
+
 	err := updatePayload.Validate()
 
 	if err != nil {
 		return responses.NewBadRequestError(err.Error())
+	}
+
+	err = entities.ValidateNurseNipFormat(updatePayload.Nip)
+
+	if err != nil {
+		return responses.NewNotFoundError(err.Error())
 	}
 
 	if !entities.IsValidUUID(nurseId) {
