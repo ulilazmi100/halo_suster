@@ -67,3 +67,64 @@ func (c *MedicalController) GetPatient(ctx echo.Context) error {
 		Data:    resp,
 	})
 }
+
+func (c *MedicalController) RegisterRecord(ctx echo.Context) error {
+	var newRecord entities.RecordRegistrationPayload
+	if err := ctx.Bind(&newRecord); err != nil {
+		return responses.NewBadRequestError(err.Error())
+	}
+
+	// Retrieve the values from the context
+	userID := ctx.Get("user_id").(string)
+	nip := ctx.Get("nip").(string)
+	name := ctx.Get("name").(string)
+
+	// Create the CreatedByDetail struct with the retrieved values
+	createdByDetail := entities.CreatedByDetail{
+		UserId: userID,
+		Nip:    nip,
+		Name:   name,
+	}
+
+	err := c.svc.RegisterRecord(ctx.Request().Context(), newRecord, createdByDetail)
+	if err != nil {
+		return err
+	}
+
+	return ctx.NoContent(http.StatusCreated)
+}
+
+func (c *MedicalController) GetRecord(ctx echo.Context) error {
+	var record entities.GetRecordQueries
+	if err := ctx.Bind(&record); err != nil {
+		return responses.NewBadRequestError(err.Error())
+	}
+
+	if record.Limit == 0 {
+		record.Limit = 5
+	}
+
+	if record.Limit < 0 || record.Offset < 0 {
+		return responses.NewBadRequestError("invalid query param")
+	}
+
+	requestCtx, cancel := context.WithTimeout(ctx.Request().Context(), 10*time.Second)
+	defer cancel()
+
+	resp, err := c.svc.GetRecord(requestCtx, record)
+	if err != nil {
+		return err
+	}
+
+	if len(resp) == 0 {
+		return ctx.JSON(http.StatusOK, simpleResponse{
+			Message: "success",
+			Data:    []interface{}{},
+		})
+	}
+
+	return ctx.JSON(http.StatusOK, simpleResponse{
+		Message: "success",
+		Data:    resp,
+	})
+}
