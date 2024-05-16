@@ -31,3 +31,7 @@ func newRoute(router *echo.Group, method, path string, handler echo.HandlerFunc)
 func newRouteWithAuth(router *echo.Group, method, path string, handler echo.HandlerFunc) {
 	router.Add(method, path, handler, middleware.Auth)
 }
+
+func newRouteWithItAuth(router *echo.Group, method, path string, handler echo.HandlerFunc) {
+	router.Add(method, path, handler, middleware.ItAuth)
+}
