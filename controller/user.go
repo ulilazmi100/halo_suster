@@ -23,7 +23,7 @@ type registerResponse struct {
 	UserId      string `json:"userId"`
 	Nip         string `json:"nip"`
 	Name        string `json:"name"`
-	AccessToken string `json:"accessToken"`
+	AccessToken string `json:"accessToken,omitempty"`
 }
 
 type loginResponse struct {
