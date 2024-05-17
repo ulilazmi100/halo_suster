@@ -73,12 +73,12 @@ func (s *medicalSvc) RegisterRecord(ctx context.Context, newRecord entities.Reco
 	existingPatient, err := s.repo.GetPatient(ctx, newRecord.IdentityNumber)
 	if err != nil {
 		if err == pgx.ErrNoRows {
-			return responses.NewBadRequestError("identityNumber is not exist")
+			return responses.NewNotFoundError("identityNumber is not exist")
 		}
 	}
 
 	if existingPatient == "" {
-		return responses.NewBadRequestError("identityNumber is not exist")
+		return responses.NewNotFoundError("identityNumber is not exist")
 	}
 
 	err = s.repo.CreateRecord(ctx, &newRecord, &createdByDetail)
