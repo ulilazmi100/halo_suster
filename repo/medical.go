@@ -81,8 +81,8 @@ func (r *medicalRepo) GetPatients(ctx context.Context, filter entities.GetPatien
 		if err != nil {
 			return nil, err
 		}
-		patient.BirthDate = birthDate.Format(time.RFC3339)
-		patient.CreatedAt = createdAt.Format(time.RFC3339)
+		patient.BirthDate = birthDate.Format(time.RFC3339Nano)
+		patient.CreatedAt = createdAt.Format(time.RFC3339Nano)
 		patients = append(patients, patient)
 	}
 
@@ -149,9 +149,9 @@ func (r *medicalRepo) GetRecord(ctx context.Context, filter entities.GetRecordQu
 			return []entities.GetRecordResponse{}, err
 		}
 		record.IdentityDetail.IdentityNumber = identityNumber
-		record.IdentityDetail.BirthDate = birthDate.Format(time.RFC3339)
+		record.IdentityDetail.BirthDate = birthDate.Format(time.RFC3339Nano)
 
-		record.CreatedAt = createdAt.Format(time.RFC3339)
+		record.CreatedAt = createdAt.Format(time.RFC3339Nano)
 
 		records = append(records, record)
 	}

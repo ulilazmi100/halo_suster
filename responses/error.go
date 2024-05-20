@@ -1,12 +1,5 @@
 package responses
 
-import (
-	"errors"
-	"net/http"
-
-	"github.com/labstack/echo/v4"
-)
-
 type CustomError struct {
 	Message    string `json:"message"`
 	StatusCode int    `json:"status"`
@@ -18,19 +11,6 @@ func (e CustomError) Error() string {
 
 func (e CustomError) Status() int {
 	return e.StatusCode
-}
-
-// Middleware to handle custom errors
-func ErrorHandler(err error, c echo.Context) {
-	var customErr CustomError
-	if errors.As(err, &customErr) {
-		c.JSON(customErr.Status(), customErr)
-	} else {
-		c.JSON(http.StatusInternalServerError, CustomError{
-			Message:    "Internal Server Error",
-			StatusCode: http.StatusInternalServerError,
-		})
-	}
 }
 
 func NewBadRequestError(message string) CustomError {

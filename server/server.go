@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	configs "halo_suster/cfg"
-	"halo_suster/responses"
+	local_mid "halo_suster/middleware"
 )
 
 type Server struct {
@@ -19,7 +19,7 @@ type Server struct {
 func NewServer(db *pgxpool.Pool) *Server {
 	// Create an Echo instance
 	app := echo.New()
-	app.HTTPErrorHandler = responses.ErrorHandler
+	app.HTTPErrorHandler = local_mid.ErrorHandler
 
 	// Initialize validator
 	validate := validator.New()
@@ -32,8 +32,6 @@ func NewServer(db *pgxpool.Pool) *Server {
 	app.Use(middleware.GzipWithConfig(middleware.GzipConfig{
 		Level: 5,
 	}))
-	app.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(20))) // Adjust the rate limit as needed
-
 	return &Server{
 		dbPool:    db,
 		app:       app,

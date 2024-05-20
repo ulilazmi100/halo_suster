@@ -118,7 +118,7 @@ func ValidateBirthDate(value any) error {
 	}
 
 	// Regex pattern to check if string is in ISO8601 format
-	pattern := `^(19|20)\d\d-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$`
+	pattern := `^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})?$`
 	rgx := regexp.MustCompile(pattern)
 	if !rgx.MatchString(birthDate) {
 		return errors.New("invalid birthDate format: must follow ISO8601")

@@ -100,7 +100,7 @@ func (r *userRepo) GetUserNipById(ctx context.Context, id string) (*entities.Use
 func (r *userRepo) UpdateNurse(ctx context.Context, nurseId string, updatePayload entities.NurseUpdatePayload) (pgconn.CommandTag, error) {
 	statement := "UPDATE users SET nip = $1, name = $2 WHERE id = $3"
 
-	res, err := r.db.Exec(ctx, statement, updatePayload.Nip, updatePayload.Name, nurseId)
+	res, err := r.db.Exec(ctx, statement, entities.Int64ToString(updatePayload.Nip), updatePayload.Name, nurseId)
 
 	return res, err
 }
@@ -144,13 +144,18 @@ func (r *userRepo) GetUsers(ctx context.Context, filter entities.GetUserQueries)
 		return nil, err
 	}
 
+	var nip string
 	for rows.Next() {
 		user := entities.GetUserResponse{}
-		err := rows.Scan(&user.UserId, &user.Nip, &user.Name, &createdAt)
+		err := rows.Scan(&user.UserId, &nip, &user.Name, &createdAt)
 		if err != nil {
 			return nil, err
 		}
-		user.CreatedAt = createdAt.Format(time.RFC3339)
+		user.Nip, err = entities.StringToInt64(nip)
+		if err != nil {
+			return nil, err
+		}
+		user.CreatedAt = createdAt.Format(time.RFC3339Nano)
 		users = append(users, user)
 	}
 
