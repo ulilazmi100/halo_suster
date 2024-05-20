@@ -186,7 +186,7 @@ func (s *userSvc) UpdateNurse(ctx context.Context, nurseId string, updatePayload
 	err = entities.ValidateNurseNipFormat(updatePayload.Nip)
 
 	if err != nil {
-		return responses.NewNotFoundError(err.Error())
+		return responses.NewBadRequestError(err.Error())
 	}
 
 	if !entities.IsValidUUID(nurseId) {

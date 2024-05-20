@@ -173,7 +173,7 @@ func ValidateNipFormat(value any) error {
 		return errors.New("parse error")
 	}
 
-	pattern := `^(303|615)[12](200[0-9]|201[0-9]|202[0-4])(0[1-9]|1[0-2])([0-9]{3})$`
+	pattern := `^(303|615)[12](200[0-9]|201[0-9]|202[0-4])(0[1-9]|1[0-2])([0-9]{3,5})$`
 	rgx := regexp.MustCompile(pattern)
 	if !rgx.MatchString(nip) {
 		return errors.New("invalid nip format")
@@ -188,7 +188,7 @@ func ValidateNurseNipFormat(value any) error {
 		return errors.New("parse error")
 	}
 
-	pattern := `^303[12](200[0-9]|201[0-9]|202[0-4])(0[1-9]|1[0-2])([0-9]{3})$`
+	pattern := `^303[12](200[0-9]|201[0-9]|202[0-4])(0[1-9]|1[0-2])([0-9]{3,5})$`
 	rgx := regexp.MustCompile(pattern)
 	if !rgx.MatchString(nip) {
 		return errors.New("invalid nurse nip format")
@@ -203,7 +203,7 @@ func ValidateITStaffNipFormat(value any) error {
 		return errors.New("parse error")
 	}
 
-	pattern := `^615[12](200[0-9]|201[0-9]|202[0-4])(0[1-9]|1[0-2])([0-9]{3})$`
+	pattern := `^615[12](200[0-9]|201[0-9]|202[0-4])(0[1-9]|1[0-2])([0-9]{3,5})$`
 	rgx := regexp.MustCompile(pattern)
 	if !rgx.MatchString(nip) {
 		return errors.New("invalid IT staff nip format")
