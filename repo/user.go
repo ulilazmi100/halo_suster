@@ -48,10 +48,10 @@ func (r *userRepo) GetUser(ctx context.Context, nip string) (*entities.User, err
 
 func (r *userRepo) CreateUser(ctx context.Context, user *entities.RegistrationPayload, hashPassword string) (string, error) {
 	var id string
-	role := CheckRoleForRegister(user.Nip)
+	role := CheckRoleForRegister(entities.Int64ToString(user.Nip))
 	statement := "INSERT INTO users (name, nip, password_hash, role) VALUES ($1, $2, $3, $4) RETURNING id"
 
-	row := r.db.QueryRow(ctx, statement, user.Name, user.Nip, hashPassword, role)
+	row := r.db.QueryRow(ctx, statement, user.Name, entities.Int64ToString(user.Nip), hashPassword, role)
 	if err := row.Scan(&id); err != nil {
 		return "", err
 	}
@@ -63,7 +63,7 @@ func (r *userRepo) CreateUserTx(ctx context.Context, tx pgx.Tx, user *entities.R
 	var id string
 	statement := "INSERT INTO users (name, nip, password_hash) VALUES ($1, $2, $3) RETURNING id"
 
-	row := tx.QueryRow(ctx, statement, user.Name, user.Nip, hashPassword)
+	row := tx.QueryRow(ctx, statement, user.Name, entities.Int64ToString(user.Nip), hashPassword)
 	if err := row.Scan(&id); err != nil {
 		return "", err
 	}
@@ -73,10 +73,10 @@ func (r *userRepo) CreateUserTx(ctx context.Context, tx pgx.Tx, user *entities.R
 
 func (r *userRepo) CreateNurseUser(ctx context.Context, user *entities.NurseRegistrationPayload) (string, error) {
 	var id string
-	role := CheckRoleForRegister(user.Nip)
+	role := CheckRoleForRegister(entities.Int64ToString(user.Nip))
 	statement := "INSERT INTO users (name, nip, password_hash, role, access) VALUES ($1, $2, '', $3, false) RETURNING id"
 
-	row := r.db.QueryRow(ctx, statement, user.Name, user.Nip, role)
+	row := r.db.QueryRow(ctx, statement, user.Name, entities.Int64ToString(user.Nip), role)
 	if err := row.Scan(&id); err != nil {
 		return "", err
 	}
@@ -181,8 +181,8 @@ func getUserConstructWhereQuery(filter entities.GetUserQueries) string {
 		whereSQL = append(whereSQL, " name ILIKE '%"+filter.Name+"%'")
 	}
 
-	if filter.Nip != "" {
-		whereSQL = append(whereSQL, " nip ILIKE '"+filter.Nip+"%'")
+	if filter.Nip != nil {
+		whereSQL = append(whereSQL, " nip ILIKE '"+entities.Int64ToString(*filter.Nip)+"%'")
 	}
 
 	if filter.Role == "it" {

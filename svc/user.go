@@ -35,7 +35,7 @@ func (s *userSvc) Register(ctx context.Context, newUser entities.RegistrationPay
 		return "", "", responses.NewBadRequestError(err.Error())
 	}
 
-	existingUser, err := s.repo.GetUser(ctx, newUser.Nip)
+	existingUser, err := s.repo.GetUser(ctx, entities.Int64ToString(newUser.Nip))
 	if err != nil {
 		if err != pgx.ErrNoRows {
 			return "", "", err
@@ -63,7 +63,7 @@ func (s *userSvc) Register(ctx context.Context, newUser entities.RegistrationPay
 		return "", "", err
 	}
 
-	token, err := crypto.GenerateToken(id, newUser.Nip, newUser.Name)
+	token, err := crypto.GenerateToken(id, entities.Int64ToString(newUser.Nip), newUser.Name)
 	if err != nil {
 		return "", "", err
 	}
@@ -116,7 +116,7 @@ func (s *userSvc) NurseRegister(ctx context.Context, newUser entities.NurseRegis
 		return "", responses.NewBadRequestError(err.Error())
 	}
 
-	existingUser, err := s.repo.GetUser(ctx, newUser.Nip)
+	existingUser, err := s.repo.GetUser(ctx, entities.Int64ToString(newUser.Nip))
 	if err != nil {
 		if err != pgx.ErrNoRows {
 			return "", err
@@ -193,7 +193,7 @@ func (s *userSvc) UpdateNurse(ctx context.Context, nurseId string, updatePayload
 		return responses.NewNotFoundError("user not found")
 	}
 
-	existingUser, err := s.repo.GetUser(ctx, updatePayload.Nip)
+	existingUser, err := s.repo.GetUser(ctx, entities.Int64ToString(updatePayload.Nip))
 	if err != nil {
 		if err != pgx.ErrNoRows {
 			return err

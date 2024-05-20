@@ -80,13 +80,17 @@ func (c *MedicalController) RegisterRecord(ctx echo.Context) error {
 	name := ctx.Get("name").(string)
 
 	// Create the CreatedByDetail struct with the retrieved values
+	nipInt, err := entities.StringToInt64(nip)
+	if err != nil {
+		return err
+	}
 	createdByDetail := entities.CreatedByDetail{
 		UserId: userID,
-		Nip:    nip,
+		Nip:    nipInt,
 		Name:   name,
 	}
 
-	err := c.svc.RegisterRecord(ctx.Request().Context(), newRecord, createdByDetail)
+	err = c.svc.RegisterRecord(ctx.Request().Context(), newRecord, createdByDetail)
 	if err != nil {
 		return err
 	}

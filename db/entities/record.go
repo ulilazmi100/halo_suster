@@ -26,7 +26,7 @@ type GetRecordQueries struct {
 	IdentityNumber  *int64 `db:"identity_number" json:"identityNumber" query:"identityNumber"`
 	Limit           int    `json:"limit" query:"limit"`
 	Offset          int    `json:"offset" query:"offset"`
-	CreatedByNip    string `db:"created_by_nip" json:"createdByNip" query:"createdBy.nip"`
+	CreatedByNip    *int64 `db:"created_by_nip" json:"createdByNip" query:"createdBy.nip"`
 	CreatedByUserId string `db:"created_by_user_id" json:"createdByUserId" query:"createdBy.userId"`
 	CreatedAt       string `db:"created_at" json:"createdAt" query:"createdAt"`
 }
@@ -40,7 +40,7 @@ type GetRecordResponse struct {
 }
 
 type CreatedByDetail struct {
-	Nip    string `json:"nip"`
+	Nip    int64  `json:"nip"`
 	Name   string `json:"name"`
 	UserId string `json:"userId"`
 }

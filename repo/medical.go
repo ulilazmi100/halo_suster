@@ -92,7 +92,7 @@ func (r *medicalRepo) GetPatients(ctx context.Context, filter entities.GetPatien
 func (r *medicalRepo) CreateRecord(ctx context.Context, record *entities.RecordRegistrationPayload, createdBy *entities.CreatedByDetail) error {
 	statement := "INSERT INTO medical_records (identity_number, symptoms, medications, created_by_nip, created_by_name, created_by_user_id) VALUES ($1, $2, $3, $4, $5, $6)"
 
-	_, err := r.db.Exec(ctx, statement, record.IdentityNumber, record.Symptoms, record.Medications, createdBy.Nip, createdBy.Name, createdBy.UserId)
+	_, err := r.db.Exec(ctx, statement, record.IdentityNumber, record.Symptoms, record.Medications, entities.Int64ToString(createdBy.Nip), createdBy.Name, createdBy.UserId)
 	if err != nil {
 		return err
 	}
@@ -129,8 +129,9 @@ func (r *medicalRepo) GetRecord(ctx context.Context, filter entities.GetRecordQu
 		record := entities.GetRecordResponse{}
 		var identityNumber int64
 		var birthDate time.Time
+		var nipString string
 
-		err := rows.Scan(&identityNumber, &record.Symptoms, &record.Medications, &record.CreatedBy.Nip, &record.CreatedBy.Name, &record.CreatedBy.UserId, &createdAt)
+		err := rows.Scan(&identityNumber, &record.Symptoms, &record.Medications, &nipString, &record.CreatedBy.Name, &record.CreatedBy.UserId, &createdAt)
 		if err != nil {
 			return nil, err
 		}
@@ -143,6 +144,10 @@ func (r *medicalRepo) GetRecord(ctx context.Context, filter entities.GetRecordQu
 			return []entities.GetRecordResponse{}, err
 		}
 
+		record.CreatedBy.Nip, err = entities.StringToInt64(nipString)
+		if err != nil {
+			return []entities.GetRecordResponse{}, err
+		}
 		record.IdentityDetail.IdentityNumber = identityNumber
 		record.IdentityDetail.BirthDate = birthDate.Format(time.RFC3339)
 
@@ -183,8 +188,8 @@ func getRecordConstructWhereQuery(filter entities.GetRecordQueries) string {
 		whereSQL = append(whereSQL, fmt.Sprintf(" identity_number = %d", *filter.IdentityNumber))
 	}
 
-	if filter.CreatedByNip != "" {
-		whereSQL = append(whereSQL, " created_by_nip = '"+filter.CreatedByNip+"'")
+	if filter.CreatedByNip != nil {
+		whereSQL = append(whereSQL, " created_by_nip = '"+entities.Int64ToString(*filter.CreatedByNip)+"'")
 	}
 
 	if filter.CreatedByUserId != "" {

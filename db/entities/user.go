@@ -3,6 +3,7 @@ package entities
 import (
 	"errors"
 	"regexp"
+	"strconv"
 	"time"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
@@ -22,19 +23,19 @@ type User struct {
 }
 
 type RegistrationPayload struct {
-	Nip      string `json:"nip" form:"nip"`
+	Nip      int64  `json:"nip" form:"nip"`
 	Name     string `json:"name,omitempty" form:"name"`
 	Password string `json:"password" form:"password"`
 }
 
 type NurseRegistrationPayload struct {
-	Nip                 string `json:"nip" form:"nip"`
+	Nip                 int64  `json:"nip" form:"nip"`
 	Name                string `json:"name,omitempty" form:"name"`
 	IdentityCardScanImg string `json:"identityCardScanImg" form:"identityCardScanImg"`
 }
 
 type NurseUpdatePayload struct {
-	Nip  string `json:"nip" form:"nip"`
+	Nip  int64  `json:"nip" form:"nip"`
 	Name string `json:"name,omitempty" form:"name"`
 }
 
@@ -47,14 +48,14 @@ type GetUserQueries struct {
 	Limit     int    `json:"limit" query:"limit"`
 	Offset    int    `json:"offset" query:"offset"`
 	Name      string `db:"name" json:"name" query:"name"`
-	Nip       string `db:"nip" json:"nip" query:"nip"`
+	Nip       *int64 `db:"nip" json:"nip" query:"nip"`
 	Role      string `db:"role" json:"role" query:"role"`
 	CreatedAt string `db:"created_at" json:"createdAt" query:"createdAt"`
 }
 
 type GetUserResponse struct {
 	UserId    string `db:"id" json:"userId" query:"userId"`
-	Nip       string `db:"nip" json:"nip" query:"nip"`
+	Nip       int64  `db:"nip" json:"nip" query:"nip"`
 	Name      string `db:"name" json:"name" query:"name"`
 	CreatedAt string `db:"created_at" json:"createdAt" query:"createdAt"`
 }
@@ -105,7 +106,6 @@ func (u *RegistrationPayload) Validate() error {
 	err := validation.ValidateStruct(u,
 		validation.Field(&u.Nip,
 			validation.Required.Error("nip is required"),
-			validation.Length(13, 13).Error("nip number must be 13 characters"),
 			validation.By(ValidateITStaffNipFormat),
 		),
 		validation.Field(&u.Name,
@@ -125,7 +125,6 @@ func (u *NurseRegistrationPayload) Validate() error {
 	err := validation.ValidateStruct(u,
 		validation.Field(&u.Nip,
 			validation.Required.Error("nip is required"),
-			validation.Length(13, 13).Error("nip number must be 13 characters"),
 			validation.By(ValidateNurseNipFormat),
 		),
 		validation.Field(&u.Name,
@@ -145,7 +144,6 @@ func (u *NurseUpdatePayload) Validate() error {
 	err := validation.ValidateStruct(u,
 		validation.Field(&u.Nip,
 			validation.Required.Error("nip is required"),
-			validation.Length(13, 13).Error("nip number must be 13 characters"),
 		),
 		validation.Field(&u.Name,
 			validation.Required.Error("name is required"),
@@ -168,9 +166,21 @@ func (u *NurseAccessPayload) Validate() error {
 }
 
 func ValidateNipFormat(value any) error {
-	nip, ok := value.(string)
-	if !ok {
-		return errors.New("parse error")
+	var nip string
+
+	switch v := value.(type) {
+	case string:
+		nip = v
+	case int64:
+		nip = strconv.FormatInt(v, 10)
+	case *int64:
+		if v != nil {
+			nip = strconv.FormatInt(*v, 10)
+		} else {
+			return errors.New("parse error: nil pointer")
+		}
+	default:
+		return errors.New("parse error: unsupported type")
 	}
 
 	pattern := `^(303|615)[12](200[0-9]|201[0-9]|202[0-4])(0[1-9]|1[0-2])([0-9]{3,5})$`
@@ -183,9 +193,21 @@ func ValidateNipFormat(value any) error {
 }
 
 func ValidateNurseNipFormat(value any) error {
-	nip, ok := value.(string)
-	if !ok {
-		return errors.New("parse error")
+	var nip string
+
+	switch v := value.(type) {
+	case string:
+		nip = v
+	case int64:
+		nip = strconv.FormatInt(v, 10)
+	case *int64:
+		if v != nil {
+			nip = strconv.FormatInt(*v, 10)
+		} else {
+			return errors.New("parse error: nil pointer")
+		}
+	default:
+		return errors.New("parse error: unsupported type")
 	}
 
 	pattern := `^303[12](200[0-9]|201[0-9]|202[0-4])(0[1-9]|1[0-2])([0-9]{3,5})$`
@@ -198,9 +220,21 @@ func ValidateNurseNipFormat(value any) error {
 }
 
 func ValidateITStaffNipFormat(value any) error {
-	nip, ok := value.(string)
-	if !ok {
-		return errors.New("parse error")
+	var nip string
+
+	switch v := value.(type) {
+	case string:
+		nip = v
+	case int64:
+		nip = strconv.FormatInt(v, 10)
+	case *int64:
+		if v != nil {
+			nip = strconv.FormatInt(*v, 10)
+		} else {
+			return errors.New("parse error: nil pointer")
+		}
+	default:
+		return errors.New("parse error: unsupported type")
 	}
 
 	pattern := `^615[12](200[0-9]|201[0-9]|202[0-4])(0[1-9]|1[0-2])([0-9]{3,5})$`
@@ -229,4 +263,14 @@ func ValidateImageURL(value any) error {
 func IsValidUUID(u string) bool {
 	_, err := uuid.Parse(u)
 	return err == nil
+}
+
+// Function to convert int64 to string
+func Int64ToString(num int64) string {
+	return strconv.FormatInt(num, 10)
+}
+
+// Function to convert string to int64
+func StringToInt64(str string) (int64, error) {
+	return strconv.ParseInt(str, 10, 64)
 }

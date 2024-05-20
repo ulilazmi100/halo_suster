@@ -21,14 +21,14 @@ func NewUserController(svc svc.UserSvc) *UserController {
 
 type registerResponse struct {
 	UserId      string `json:"userId"`
-	Nip         string `json:"nip"`
+	Nip         int64  `json:"nip"`
 	Name        string `json:"name"`
 	AccessToken string `json:"accessToken,omitempty"`
 }
 
 type loginResponse struct {
 	UserId      string `json:"userId"`
-	Nip         string `json:"nip"`
+	Nip         int64  `json:"nip"`
 	Name        string `json:"name"`
 	AccessToken string `json:"accessToken"`
 }
@@ -72,7 +72,7 @@ func (c *UserController) Login(ctx echo.Context) error {
 	defer cancel()
 
 	loginPayload := entities.Credential{
-		Nip:      user.Nip,
+		Nip:      entities.Int64ToString(user.Nip),
 		Password: user.Password,
 	}
 
@@ -127,7 +127,7 @@ func (c *UserController) NurseLogin(ctx echo.Context) error {
 	defer cancel()
 
 	loginPayload := entities.Credential{
-		Nip:      user.Nip,
+		Nip:      entities.Int64ToString(user.Nip),
 		Password: user.Password,
 	}
 

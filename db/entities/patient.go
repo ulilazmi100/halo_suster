@@ -38,7 +38,7 @@ type GetPatientQueries struct {
 }
 
 type GetPatientResponse struct {
-	IdentityNumber string `db:"identity_number" json:"identityNumber"`
+	IdentityNumber int64  `db:"identity_number" json:"identityNumber"`
 	PhoneNumber    string `db:"phone_number" json:"phoneNumber"`
 	Name           string `db:"name" json:"name"`
 	BirthDate      string `db:"birth_date" json:"birthDate"`
