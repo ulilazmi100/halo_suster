@@ -1,12 +1,10 @@
 package controller
 
 import (
-	"context"
 	"halo_suster/db/entities"
 	"halo_suster/responses"
 	"halo_suster/svc"
 	"net/http"
-	"time"
 
 	"github.com/labstack/echo/v4"
 )
@@ -46,11 +44,7 @@ func (c *MedicalController) GetPatient(ctx echo.Context) error {
 	if patient.Limit < 0 || patient.Offset < 0 {
 		return responses.NewBadRequestError("invalid query param")
 	}
-
-	requestCtx, cancel := context.WithTimeout(ctx.Request().Context(), 10*time.Second)
-	defer cancel()
-
-	resp, err := c.svc.GetPatient(requestCtx, patient)
+	resp, err := c.svc.GetPatient(ctx.Request().Context(), patient)
 	if err != nil {
 		return err
 	}
@@ -112,10 +106,7 @@ func (c *MedicalController) GetRecord(ctx echo.Context) error {
 		return responses.NewBadRequestError("invalid query param")
 	}
 
-	requestCtx, cancel := context.WithTimeout(ctx.Request().Context(), 10*time.Second)
-	defer cancel()
-
-	resp, err := c.svc.GetRecord(requestCtx, record)
+	resp, err := c.svc.GetRecord(ctx.Request().Context(), record)
 	if err != nil {
 		return err
 	}
