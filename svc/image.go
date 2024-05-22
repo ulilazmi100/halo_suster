@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"mime/multipart"
 	"strings"
+	"time"
 
 	"halo_suster/responses"
 
@@ -66,7 +67,10 @@ func (i *imageSvc) UploadImage(fileHeader *multipart.FileHeader) (string, error)
 		Body:   file,
 	}
 
-	_, err = i.s3Client.PutObject(context.TODO(), input)
+	ctx, cancel := context.WithTimeout(context.TODO(), time.Minute*2)
+	defer cancel()
+
+	_, err = i.s3Client.PutObject(ctx, input)
 	if err != nil {
 		return "", err
 	}
