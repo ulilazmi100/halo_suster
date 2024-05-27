@@ -42,7 +42,7 @@ func (c *UserController) Register(ctx echo.Context) error {
 		return responses.NewBadRequestError(err.Error())
 	}
 
-	userId, accessToken, err := c.svc.Register(ctx.Request().Context(), newUser)
+	userId, accessToken, err := c.svc.Register(newUser)
 	if err != nil {
 		return err
 	}
@@ -71,7 +71,7 @@ func (c *UserController) Login(ctx echo.Context) error {
 		Password: user.Password,
 	}
 
-	userId, name, accessToken, err := c.svc.Login(ctx.Request().Context(), loginPayload)
+	userId, name, accessToken, err := c.svc.Login(loginPayload)
 	if err != nil {
 		return err
 	}
@@ -95,7 +95,7 @@ func (c *UserController) NurseRegister(ctx echo.Context) error {
 		return responses.NewBadRequestError(err.Error())
 	}
 
-	userId, err := c.svc.NurseRegister(ctx.Request().Context(), newUser)
+	userId, err := c.svc.NurseRegister(newUser)
 	if err != nil {
 		return err
 	}
@@ -123,7 +123,7 @@ func (c *UserController) NurseLogin(ctx echo.Context) error {
 		Password: user.Password,
 	}
 
-	userId, name, accessToken, err := c.svc.NurseLogin(ctx.Request().Context(), loginPayload)
+	userId, name, accessToken, err := c.svc.NurseLogin(loginPayload)
 	if err != nil {
 		return err
 	}
@@ -148,7 +148,7 @@ func (c *UserController) NurseUpdate(ctx echo.Context) error {
 		return responses.NewBadRequestError(err.Error())
 	}
 
-	if err := c.svc.UpdateNurse(ctx.Request().Context(), id, updatePayload); err != nil {
+	if err := c.svc.UpdateNurse(id, updatePayload); err != nil {
 		return err
 	}
 
@@ -158,7 +158,7 @@ func (c *UserController) NurseUpdate(ctx echo.Context) error {
 func (c *UserController) NurseDelete(ctx echo.Context) error {
 	id := ctx.Param("userId")
 
-	if err := c.svc.DeleteNurse(ctx.Request().Context(), id); err != nil {
+	if err := c.svc.DeleteNurse(id); err != nil {
 		return err
 	}
 
@@ -172,7 +172,7 @@ func (c *UserController) NurseAccess(ctx echo.Context) error {
 		return responses.NewBadRequestError(err.Error())
 	}
 
-	if err := c.svc.AccessNurse(ctx.Request().Context(), id, accessPayload); err != nil {
+	if err := c.svc.AccessNurse(id, accessPayload); err != nil {
 		return err
 	}
 
@@ -193,7 +193,7 @@ func (c *UserController) GetUser(ctx echo.Context) error {
 		return responses.NewBadRequestError("invalid query param")
 	}
 
-	resp, err := c.svc.GetUser(ctx.Request().Context(), user)
+	resp, err := c.svc.GetUser(user)
 	if err != nil {
 		return err
 	}

@@ -1,42 +1,38 @@
 package repo
 
 import (
-	"context"
 	"halo_suster/db/entities"
+	"database/sql"
 	"strings"
 	"time"
 
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jmoiron/sqlx"
 )
 
 type UserRepo interface {
-	GetUser(ctx context.Context, nip string) (*entities.User, error)
-	CreateUser(ctx context.Context, user *entities.RegistrationPayload, hashPassword string) (string, error)
-	CreateUserTx(ctx context.Context, tx pgx.Tx, user *entities.RegistrationPayload, hashPassword string) (string, error)
-	CreateNurseUser(ctx context.Context, user *entities.NurseRegistrationPayload) (string, error)
-	GetUserNipById(ctx context.Context, id string) (*entities.User, error)
-	UpdateNurse(ctx context.Context, nurseId string, updatePayload entities.NurseUpdatePayload) (pgconn.CommandTag, error)
-	UpdateAccessNurse(ctx context.Context, nurseId string, passwordHash string) (pgconn.CommandTag, error)
-	DeleteNurse(ctx context.Context, userId string) (pgconn.CommandTag, error)
-	GetUsers(ctx context.Context, filter entities.GetUserQueries) ([]entities.GetUserResponse, error)
-	BeginTx(ctx context.Context) (pgx.Tx, error)
+	GetUser(nip string) (*entities.User, error)
+	CreateUser(user *entities.RegistrationPayload, hashPassword string) (string, error)
+	CreateNurseUser(user *entities.NurseRegistrationPayload) (string, error)
+	GetUserNipById(id string) (*entities.User, error)
+	UpdateNurse(nurseId string, updatePayload entities.NurseUpdatePayload) (sql.Result, error)
+	UpdateAccessNurse(nurseId string, passwordHash string) (sql.Result, error)
+	DeleteNurse(userId string) (sql.Result, error)
+	GetUsers(filter entities.GetUserQueries) ([]entities.GetUserResponse, error)
 }
 
 type userRepo struct {
-	db *pgxpool.Pool
+	db *sqlx.DB
 }
 
-func NewUserRepo(db *pgxpool.Pool) UserRepo {
+func NewUserRepo(db *sqlx.DB) UserRepo {
 	return &userRepo{db}
 }
 
-func (r *userRepo) GetUser(ctx context.Context, nip string) (*entities.User, error) {
+func (r *userRepo) GetUser(nip string) (*entities.User, error) {
 	var user entities.User
 	query := "SELECT id, name, password_hash, access FROM users WHERE nip = $1"
 
-	row := r.db.QueryRow(ctx, query, nip)
+	row := r.db.QueryRow(query, nip)
 	err := row.Scan(&user.Id, &user.Name, &user.Password, &user.Access)
 	if err != nil {
 		return nil, err
@@ -46,12 +42,12 @@ func (r *userRepo) GetUser(ctx context.Context, nip string) (*entities.User, err
 	return &user, nil
 }
 
-func (r *userRepo) CreateUser(ctx context.Context, user *entities.RegistrationPayload, hashPassword string) (string, error) {
+func (r *userRepo) CreateUser(user *entities.RegistrationPayload, hashPassword string) (string, error) {
 	var id string
 	role := CheckRoleForRegister(entities.Int64ToString(user.Nip))
 	statement := "INSERT INTO users (name, nip, password_hash, role) VALUES ($1, $2, $3, $4) RETURNING id"
 
-	row := r.db.QueryRow(ctx, statement, user.Name, entities.Int64ToString(user.Nip), hashPassword, role)
+	row := r.db.QueryRow(statement, user.Name, entities.Int64ToString(user.Nip), hashPassword, role)
 	if err := row.Scan(&id); err != nil {
 		return "", err
 	}
@@ -59,24 +55,12 @@ func (r *userRepo) CreateUser(ctx context.Context, user *entities.RegistrationPa
 	return id, nil
 }
 
-func (r *userRepo) CreateUserTx(ctx context.Context, tx pgx.Tx, user *entities.RegistrationPayload, hashPassword string) (string, error) {
-	var id string
-	statement := "INSERT INTO users (name, nip, password_hash) VALUES ($1, $2, $3) RETURNING id"
-
-	row := tx.QueryRow(ctx, statement, user.Name, entities.Int64ToString(user.Nip), hashPassword)
-	if err := row.Scan(&id); err != nil {
-		return "", err
-	}
-
-	return id, nil
-}
-
-func (r *userRepo) CreateNurseUser(ctx context.Context, user *entities.NurseRegistrationPayload) (string, error) {
+func (r *userRepo) CreateNurseUser(user *entities.NurseRegistrationPayload) (string, error) {
 	var id string
 	role := CheckRoleForRegister(entities.Int64ToString(user.Nip))
 	statement := "INSERT INTO users (name, nip, password_hash, role, access) VALUES ($1, $2, '', $3, false) RETURNING id"
 
-	row := r.db.QueryRow(ctx, statement, user.Name, entities.Int64ToString(user.Nip), role)
+	row := r.db.QueryRow(statement, user.Name, entities.Int64ToString(user.Nip), role)
 	if err := row.Scan(&id); err != nil {
 		return "", err
 	}
@@ -84,11 +68,11 @@ func (r *userRepo) CreateNurseUser(ctx context.Context, user *entities.NurseRegi
 	return id, nil
 }
 
-func (r *userRepo) GetUserNipById(ctx context.Context, id string) (*entities.User, error) {
+func (r *userRepo) GetUserNipById(id string) (*entities.User, error) {
 	var user entities.User
 	query := "SELECT nip FROM users WHERE id = $1"
 
-	row := r.db.QueryRow(ctx, query, id)
+	row := r.db.QueryRow(query, id)
 	err := row.Scan(&user.Nip)
 	if err != nil {
 		return nil, err
@@ -97,30 +81,30 @@ func (r *userRepo) GetUserNipById(ctx context.Context, id string) (*entities.Use
 	return &user, nil
 }
 
-func (r *userRepo) UpdateNurse(ctx context.Context, nurseId string, updatePayload entities.NurseUpdatePayload) (pgconn.CommandTag, error) {
+func (r *userRepo) UpdateNurse(nurseId string, updatePayload entities.NurseUpdatePayload) (sql.Result, error) {
 	statement := "UPDATE users SET nip = $1, name = $2 WHERE id = $3"
 
-	res, err := r.db.Exec(ctx, statement, entities.Int64ToString(updatePayload.Nip), updatePayload.Name, nurseId)
+	res, err := r.db.Exec(statement, entities.Int64ToString(updatePayload.Nip), updatePayload.Name, nurseId)
 
 	return res, err
 }
 
-func (r *userRepo) DeleteNurse(ctx context.Context, userId string) (pgconn.CommandTag, error) {
+func (r *userRepo) DeleteNurse(userId string) (sql.Result, error) {
 	statement := "DELETE FROM users WHERE id = $1"
 
-	res, err := r.db.Exec(ctx, statement, userId)
+	res, err := r.db.Exec(statement, userId)
 	return res, err
 }
 
-func (r *userRepo) UpdateAccessNurse(ctx context.Context, nurseId string, passwordHash string) (pgconn.CommandTag, error) {
+func (r *userRepo) UpdateAccessNurse(nurseId string, passwordHash string) (sql.Result, error) {
 	statement := "UPDATE users SET password_hash = $1, access = true WHERE id = $2"
 
-	res, err := r.db.Exec(ctx, statement, passwordHash, nurseId)
+	res, err := r.db.Exec(statement, passwordHash, nurseId)
 
 	return res, err
 }
 
-func (r *userRepo) GetUsers(ctx context.Context, filter entities.GetUserQueries) ([]entities.GetUserResponse, error) {
+func (r *userRepo) GetUsers(filter entities.GetUserQueries) ([]entities.GetUserResponse, error) {
 	var users []entities.GetUserResponse
 	var createdAt time.Time
 	query := "SELECT id, nip, name, created_at FROM users"
@@ -139,7 +123,7 @@ func (r *userRepo) GetUsers(ctx context.Context, filter entities.GetUserQueries)
 
 	query += " limit $1 offset $2"
 
-	rows, err := r.db.Query(ctx, query, filter.Limit, filter.Offset)
+	rows, err := r.db.Query(query, filter.Limit, filter.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -160,10 +144,6 @@ func (r *userRepo) GetUsers(ctx context.Context, filter entities.GetUserQueries)
 	}
 
 	return users, nil
-}
-
-func (r *userRepo) BeginTx(ctx context.Context) (pgx.Tx, error) {
-	return r.db.Begin(ctx)
 }
 
 func CheckRoleForRegister(nip string) string {

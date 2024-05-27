@@ -1,36 +1,35 @@
 package repo
 
 import (
-	"context"
-	"fmt"
 	"halo_suster/db/entities"
+	"fmt"
 	"strings"
 	"time"
 
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jmoiron/sqlx"
 )
 
 type MedicalRepo interface {
-	GetPatient(ctx context.Context, patientIdentityNumber int64) (string, error)
-	CreatePatient(ctx context.Context, patient *entities.PatientRegistrationPayload) error
-	GetPatients(ctx context.Context, filter entities.GetPatientQueries) ([]entities.GetPatientResponse, error)
-	CreateRecord(ctx context.Context, patient *entities.RecordRegistrationPayload, createdBy *entities.CreatedByDetail) error
-	GetRecord(ctx context.Context, filter entities.GetRecordQueries) ([]entities.GetRecordResponse, error)
+	GetPatient(patientIdentityNumber int64) (string, error)
+	CreatePatient(patient *entities.PatientRegistrationPayload) error
+	GetPatients(filter entities.GetPatientQueries) ([]entities.GetPatientResponse, error)
+	CreateRecord(patient *entities.RecordRegistrationPayload, createdBy *entities.CreatedByDetail) error
+	GetRecord(filter entities.GetRecordQueries) ([]entities.GetRecordResponse, error)
 }
 
 type medicalRepo struct {
-	db *pgxpool.Pool
+	db *sqlx.DB
 }
 
-func NewMedicalRepo(db *pgxpool.Pool) MedicalRepo {
+func NewMedicalRepo(db *sqlx.DB) MedicalRepo {
 	return &medicalRepo{db}
 }
 
-func (r *medicalRepo) GetPatient(ctx context.Context, patientIdentityNumber int64) (string, error) {
+func (r *medicalRepo) GetPatient(patientIdentityNumber int64) (string, error) {
 	var identityNumber string
 	query := "SELECT identity_number FROM patients WHERE identity_number = $1"
 
-	row := r.db.QueryRow(ctx, query, patientIdentityNumber)
+	row := r.db.QueryRow(query, patientIdentityNumber)
 	err := row.Scan(&identityNumber)
 	if err != nil {
 		return "", err
@@ -39,10 +38,10 @@ func (r *medicalRepo) GetPatient(ctx context.Context, patientIdentityNumber int6
 	return identityNumber, nil
 }
 
-func (r *medicalRepo) CreatePatient(ctx context.Context, patient *entities.PatientRegistrationPayload) error {
+func (r *medicalRepo) CreatePatient(patient *entities.PatientRegistrationPayload) error {
 	statement := "INSERT INTO patients (identity_number, phone_number, name, birth_date, gender, identity_card_scan_img) VALUES ($1, $2, $3, $4, $5, $6)"
 
-	_, err := r.db.Exec(ctx, statement, patient.IdentityNumber, patient.PhoneNumber, patient.Name, patient.BirthDate, patient.Gender, patient.IdentityCardScanImg)
+	_, err := r.db.Exec(statement, patient.IdentityNumber, patient.PhoneNumber, patient.Name, patient.BirthDate, patient.Gender, patient.IdentityCardScanImg)
 	if err != nil {
 		return err
 	}
@@ -50,7 +49,7 @@ func (r *medicalRepo) CreatePatient(ctx context.Context, patient *entities.Patie
 	return nil
 }
 
-func (r *medicalRepo) GetPatients(ctx context.Context, filter entities.GetPatientQueries) ([]entities.GetPatientResponse, error) {
+func (r *medicalRepo) GetPatients(filter entities.GetPatientQueries) ([]entities.GetPatientResponse, error) {
 	var patients []entities.GetPatientResponse
 	var createdAt time.Time
 	var birthDate time.Time
@@ -70,7 +69,7 @@ func (r *medicalRepo) GetPatients(ctx context.Context, filter entities.GetPatien
 
 	query += " limit $1 offset $2"
 
-	rows, err := r.db.Query(ctx, query, filter.Limit, filter.Offset)
+	rows, err := r.db.Query(query, filter.Limit, filter.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -89,10 +88,10 @@ func (r *medicalRepo) GetPatients(ctx context.Context, filter entities.GetPatien
 	return patients, nil
 }
 
-func (r *medicalRepo) CreateRecord(ctx context.Context, record *entities.RecordRegistrationPayload, createdBy *entities.CreatedByDetail) error {
+func (r *medicalRepo) CreateRecord(record *entities.RecordRegistrationPayload, createdBy *entities.CreatedByDetail) error {
 	statement := "INSERT INTO medical_records (identity_number, symptoms, medications, created_by_nip, created_by_name, created_by_user_id) VALUES ($1, $2, $3, $4, $5, $6)"
 
-	_, err := r.db.Exec(ctx, statement, record.IdentityNumber, record.Symptoms, record.Medications, entities.Int64ToString(createdBy.Nip), createdBy.Name, createdBy.UserId)
+	_, err := r.db.Exec(statement, record.IdentityNumber, record.Symptoms, record.Medications, entities.Int64ToString(createdBy.Nip), createdBy.Name, createdBy.UserId)
 	if err != nil {
 		return err
 	}
@@ -100,7 +99,7 @@ func (r *medicalRepo) CreateRecord(ctx context.Context, record *entities.RecordR
 	return nil
 }
 
-func (r *medicalRepo) GetRecord(ctx context.Context, filter entities.GetRecordQueries) ([]entities.GetRecordResponse, error) {
+func (r *medicalRepo) GetRecord(filter entities.GetRecordQueries) ([]entities.GetRecordResponse, error) {
 	var records []entities.GetRecordResponse
 	var createdAt time.Time
 
@@ -120,7 +119,7 @@ func (r *medicalRepo) GetRecord(ctx context.Context, filter entities.GetRecordQu
 
 	query += " limit $1 offset $2"
 
-	rows, err := r.db.Query(ctx, query, filter.Limit, filter.Offset)
+	rows, err := r.db.Query(query, filter.Limit, filter.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +137,7 @@ func (r *medicalRepo) GetRecord(ctx context.Context, filter entities.GetRecordQu
 
 		queryPatient := "SELECT phone_number, name, birth_date, gender, identity_card_scan_img FROM patients WHERE identity_number = $1"
 
-		row := r.db.QueryRow(ctx, queryPatient, identityNumber)
+		row := r.db.QueryRow(queryPatient, identityNumber)
 		err = row.Scan(&record.IdentityDetail.PhoneNumber, &record.IdentityDetail.Name, &birthDate, &record.IdentityDetail.Gender, &record.IdentityDetail.IdentityCardScanImg)
 		if err != nil {
 			return []entities.GetRecordResponse{}, err

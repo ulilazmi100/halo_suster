@@ -1,30 +1,30 @@
 package server
 
 import (
-	"context"
 	configs "halo_suster/cfg"
 	"halo_suster/controller"
 	"halo_suster/middleware"
 	"halo_suster/repo"
 	"halo_suster/svc"
+	"context"
 
 	"log"
 
 	awsCfg "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 )
 
 func (s *Server) RegisterRoute(config configs.Config) {
 	mainRoute := s.app.Group("/v1")
 
-	registerUserRoute(mainRoute, s.dbPool)
-	registerMedicalRoute(mainRoute, s.dbPool)
+	registerUserRoute(mainRoute, s.db)
+	registerMedicalRoute(mainRoute, s.db)
 	registerImageRoute(mainRoute, config)
 }
 
-func registerUserRoute(r *echo.Group, db *pgxpool.Pool) {
+func registerUserRoute(r *echo.Group, db *sqlx.DB) {
 	ctr := controller.NewUserController(svc.NewUserSvc(repo.NewUserRepo(db)))
 
 	itGroup := r.Group("/user/it")
@@ -42,7 +42,7 @@ func registerUserRoute(r *echo.Group, db *pgxpool.Pool) {
 	newRouteWithItAuth(userGroup, "GET", "", ctr.GetUser)
 }
 
-func registerMedicalRoute(r *echo.Group, db *pgxpool.Pool) {
+func registerMedicalRoute(r *echo.Group, db *sqlx.DB) {
 	ctr := controller.NewMedicalController(svc.NewMedicalSvc(repo.NewMedicalRepo(db)))
 
 	patientGroup := r.Group("/medical/patient")

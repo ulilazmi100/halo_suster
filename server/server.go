@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/go-playground/validator/v10"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
@@ -11,12 +11,12 @@ import (
 )
 
 type Server struct {
-	dbPool    *pgxpool.Pool
+	db        *sqlx.DB
 	app       *echo.Echo
 	validator *validator.Validate
 }
 
-func NewServer(db *pgxpool.Pool) *Server {
+func NewServer(db *sqlx.DB) *Server {
 	// Create an Echo instance
 	app := echo.New()
 	app.HTTPErrorHandler = local_mid.ErrorHandler
@@ -33,7 +33,7 @@ func NewServer(db *pgxpool.Pool) *Server {
 		Level: 5,
 	}))
 	return &Server{
-		dbPool:    db,
+		db:        db,
 		app:       app,
 		validator: validate,
 	}

@@ -23,7 +23,7 @@ func (c *MedicalController) RegisterPatient(ctx echo.Context) error {
 		return responses.NewBadRequestError(err.Error())
 	}
 
-	err := c.svc.RegisterPatient(ctx.Request().Context(), newPatient)
+	err := c.svc.RegisterPatient(newPatient)
 	if err != nil {
 		return err
 	}
@@ -44,7 +44,7 @@ func (c *MedicalController) GetPatient(ctx echo.Context) error {
 	if patient.Limit < 0 || patient.Offset < 0 {
 		return responses.NewBadRequestError("invalid query param")
 	}
-	resp, err := c.svc.GetPatient(ctx.Request().Context(), patient)
+	resp, err := c.svc.GetPatient(patient)
 	if err != nil {
 		return err
 	}
@@ -84,7 +84,7 @@ func (c *MedicalController) RegisterRecord(ctx echo.Context) error {
 		Name:   name,
 	}
 
-	err = c.svc.RegisterRecord(ctx.Request().Context(), newRecord, createdByDetail)
+	err = c.svc.RegisterRecord(newRecord, createdByDetail)
 	if err != nil {
 		return err
 	}
@@ -106,7 +106,7 @@ func (c *MedicalController) GetRecord(ctx echo.Context) error {
 		return responses.NewBadRequestError("invalid query param")
 	}
 
-	resp, err := c.svc.GetRecord(ctx.Request().Context(), record)
+	resp, err := c.svc.GetRecord(record)
 	if err != nil {
 		return err
 	}

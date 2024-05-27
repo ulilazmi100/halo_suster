@@ -1,25 +1,23 @@
 package svc
 
 import (
-	"context"
 	"halo_suster/crypto"
 	"halo_suster/db/entities"
 	"halo_suster/repo"
 	"halo_suster/responses"
+	"database/sql"
 	"strings"
-
-	"github.com/jackc/pgx/v5"
 )
 
 type UserSvc interface {
-	Register(ctx context.Context, newUser entities.RegistrationPayload) (string, string, error)
-	Login(ctx context.Context, user entities.Credential) (string, string, string, error)
-	NurseRegister(ctx context.Context, newUser entities.NurseRegistrationPayload) (string, error)
-	NurseLogin(ctx context.Context, creds entities.Credential) (string, string, string, error)
-	UpdateNurse(ctx context.Context, nurseId string, updatePayload entities.NurseUpdatePayload) error
-	DeleteNurse(ctx context.Context, nurseId string) error
-	AccessNurse(ctx context.Context, nurseId string, password entities.NurseAccessPayload) error
-	GetUser(ctx context.Context, GetUserQueries entities.GetUserQueries) ([]entities.GetUserResponse, error)
+	Register(newUser entities.RegistrationPayload) (string, string, error)
+	Login(user entities.Credential) (string, string, string, error)
+	NurseRegister(newUser entities.NurseRegistrationPayload) (string, error)
+	NurseLogin(creds entities.Credential) (string, string, string, error)
+	UpdateNurse(nurseId string, updatePayload entities.NurseUpdatePayload) error
+	DeleteNurse(nurseId string) error
+	AccessNurse(nurseId string, password entities.NurseAccessPayload) error
+	GetUser(GetUserQueries entities.GetUserQueries) ([]entities.GetUserResponse, error)
 }
 
 type userSvc struct {
@@ -30,14 +28,14 @@ func NewUserSvc(repo repo.UserRepo) UserSvc {
 	return &userSvc{repo}
 }
 
-func (s *userSvc) Register(ctx context.Context, newUser entities.RegistrationPayload) (string, string, error) {
+func (s *userSvc) Register(newUser entities.RegistrationPayload) (string, string, error) {
 	if err := newUser.Validate(); err != nil {
 		return "", "", responses.NewBadRequestError(err.Error())
 	}
 
-	existingUser, err := s.repo.GetUser(ctx, entities.Int64ToString(newUser.Nip))
+	existingUser, err := s.repo.GetUser(entities.Int64ToString(newUser.Nip))
 	if err != nil {
-		if err != pgx.ErrNoRows {
+		if err != sql.ErrNoRows {
 			return "", "", err
 		}
 	}
@@ -51,14 +49,7 @@ func (s *userSvc) Register(ctx context.Context, newUser entities.RegistrationPay
 		return "", "", err
 	}
 
-	// // Use a transaction for creating the user and generating the token
-	// tx, err := s.repo.BeginTx(ctx)
-	// if err != nil {
-	// 	return "", "", err
-	// }
-	// defer tx.Rollback(ctx)
-
-	id, err := s.repo.CreateUser(ctx, &newUser, hashedPassword)
+	id, err := s.repo.CreateUser(&newUser, hashedPassword)
 	if err != nil {
 		return "", "", err
 	}
@@ -68,14 +59,10 @@ func (s *userSvc) Register(ctx context.Context, newUser entities.RegistrationPay
 		return "", "", err
 	}
 
-	// if err := tx.Commit(ctx); err != nil {
-	// 	return "", "", err
-	// }
-
 	return id, token, nil
 }
 
-func (s *userSvc) Login(ctx context.Context, creds entities.Credential) (string, string, string, error) {
+func (s *userSvc) Login(creds entities.Credential) (string, string, string, error) {
 	if strings.HasPrefix(creds.Nip, "303") {
 		return "", "", "", responses.NewNotFoundError("user is not from IT (nip not starts with 615)")
 	}
@@ -90,9 +77,9 @@ func (s *userSvc) Login(ctx context.Context, creds entities.Credential) (string,
 		return "", "", "", responses.NewBadRequestError(err.Error())
 	}
 
-	user, err := s.repo.GetUser(ctx, creds.Nip)
+	user, err := s.repo.GetUser(creds.Nip)
 	if err != nil {
-		if err == pgx.ErrNoRows {
+		if err == sql.ErrNoRows {
 			return "", "", "", responses.NewNotFoundError("user not found")
 		}
 		return "", "", "", err
@@ -111,14 +98,14 @@ func (s *userSvc) Login(ctx context.Context, creds entities.Credential) (string,
 	return user.Id, user.Name, token, nil
 }
 
-func (s *userSvc) NurseRegister(ctx context.Context, newUser entities.NurseRegistrationPayload) (string, error) {
+func (s *userSvc) NurseRegister(newUser entities.NurseRegistrationPayload) (string, error) {
 	if err := newUser.Validate(); err != nil {
 		return "", responses.NewBadRequestError(err.Error())
 	}
 
-	existingUser, err := s.repo.GetUser(ctx, entities.Int64ToString(newUser.Nip))
+	existingUser, err := s.repo.GetUser(entities.Int64ToString(newUser.Nip))
 	if err != nil {
-		if err != pgx.ErrNoRows {
+		if err != sql.ErrNoRows {
 			return "", err
 		}
 	}
@@ -127,7 +114,7 @@ func (s *userSvc) NurseRegister(ctx context.Context, newUser entities.NurseRegis
 		return "", responses.NewConflictError("user already exists")
 	}
 
-	id, err := s.repo.CreateNurseUser(ctx, &newUser)
+	id, err := s.repo.CreateNurseUser(&newUser)
 	if err != nil {
 		return "", err
 	}
@@ -135,7 +122,7 @@ func (s *userSvc) NurseRegister(ctx context.Context, newUser entities.NurseRegis
 	return id, nil
 }
 
-func (s *userSvc) NurseLogin(ctx context.Context, creds entities.Credential) (string, string, string, error) {
+func (s *userSvc) NurseLogin(creds entities.Credential) (string, string, string, error) {
 	if strings.HasPrefix(creds.Nip, "615") {
 		return "", "", "", responses.NewNotFoundError("user is not from nurse (nip not starts with 303)")
 	}
@@ -150,9 +137,9 @@ func (s *userSvc) NurseLogin(ctx context.Context, creds entities.Credential) (st
 		return "", "", "", responses.NewBadRequestError(err.Error())
 	}
 
-	user, err := s.repo.GetUser(ctx, creds.Nip)
+	user, err := s.repo.GetUser(creds.Nip)
 	if err != nil {
-		if err == pgx.ErrNoRows {
+		if err == sql.ErrNoRows {
 			return "", "", "", responses.NewNotFoundError("user not found")
 		}
 		return "", "", "", err
@@ -175,7 +162,7 @@ func (s *userSvc) NurseLogin(ctx context.Context, creds entities.Credential) (st
 	return user.Id, user.Name, token, nil
 }
 
-func (s *userSvc) UpdateNurse(ctx context.Context, nurseId string, updatePayload entities.NurseUpdatePayload) error {
+func (s *userSvc) UpdateNurse(nurseId string, updatePayload entities.NurseUpdatePayload) error {
 
 	err := updatePayload.Validate()
 
@@ -193,9 +180,9 @@ func (s *userSvc) UpdateNurse(ctx context.Context, nurseId string, updatePayload
 		return responses.NewNotFoundError("user not found")
 	}
 
-	existingUser, err := s.repo.GetUser(ctx, entities.Int64ToString(updatePayload.Nip))
+	existingUser, err := s.repo.GetUser(entities.Int64ToString(updatePayload.Nip))
 	if err != nil {
-		if err != pgx.ErrNoRows {
+		if err != sql.ErrNoRows {
 			return err
 		}
 	}
@@ -204,9 +191,9 @@ func (s *userSvc) UpdateNurse(ctx context.Context, nurseId string, updatePayload
 		return responses.NewConflictError("conflict nip already used")
 	}
 
-	user, err := s.repo.GetUserNipById(ctx, nurseId)
+	user, err := s.repo.GetUserNipById(nurseId)
 	if err != nil {
-		if err == pgx.ErrNoRows {
+		if err == sql.ErrNoRows {
 			return responses.NewNotFoundError("user not found")
 		}
 		return err
@@ -216,9 +203,10 @@ func (s *userSvc) UpdateNurse(ctx context.Context, nurseId string, updatePayload
 		return responses.NewNotFoundError("user is not a nurse (nip not starts with 303)")
 	}
 
-	res, err := s.repo.UpdateNurse(ctx, nurseId, updatePayload)
+	res, err := s.repo.UpdateNurse(nurseId, updatePayload)
 
-	if res.RowsAffected() == 0 {
+	rowAffected, err := res.RowsAffected()
+	if rowAffected == 0 {
 		return responses.NewNotFoundError(err.Error())
 	}
 
@@ -229,14 +217,14 @@ func (s *userSvc) UpdateNurse(ctx context.Context, nurseId string, updatePayload
 	return err
 }
 
-func (s *userSvc) DeleteNurse(ctx context.Context, nurseId string) error {
+func (s *userSvc) DeleteNurse(nurseId string) error {
 	if !entities.IsValidUUID(nurseId) {
 		return responses.NewNotFoundError("user not found")
 	}
 
-	user, err := s.repo.GetUserNipById(ctx, nurseId)
+	user, err := s.repo.GetUserNipById(nurseId)
 	if err != nil {
-		if err == pgx.ErrNoRows {
+		if err == sql.ErrNoRows {
 			return responses.NewNotFoundError("user not found")
 		}
 		return err
@@ -246,9 +234,10 @@ func (s *userSvc) DeleteNurse(ctx context.Context, nurseId string) error {
 		return responses.NewNotFoundError("user is not a nurse (nip not starts with 303)")
 	}
 
-	res, err := s.repo.DeleteNurse(ctx, nurseId)
+	res, err := s.repo.DeleteNurse(nurseId)
 
-	if res.RowsAffected() == 0 {
+	rowAffected, err := res.RowsAffected()
+	if rowAffected == 0 {
 		return responses.NewNotFoundError(err.Error())
 	}
 
@@ -259,7 +248,7 @@ func (s *userSvc) DeleteNurse(ctx context.Context, nurseId string) error {
 	return err
 }
 
-func (s *userSvc) AccessNurse(ctx context.Context, nurseId string, accessPayload entities.NurseAccessPayload) error {
+func (s *userSvc) AccessNurse(nurseId string, accessPayload entities.NurseAccessPayload) error {
 	err := accessPayload.Validate()
 
 	if err != nil {
@@ -270,9 +259,9 @@ func (s *userSvc) AccessNurse(ctx context.Context, nurseId string, accessPayload
 		return responses.NewNotFoundError("user not found")
 	}
 
-	user, err := s.repo.GetUserNipById(ctx, nurseId)
+	user, err := s.repo.GetUserNipById(nurseId)
 	if err != nil {
-		if err == pgx.ErrNoRows {
+		if err == sql.ErrNoRows {
 			return responses.NewNotFoundError("user not found")
 		}
 		return err
@@ -287,9 +276,10 @@ func (s *userSvc) AccessNurse(ctx context.Context, nurseId string, accessPayload
 		return err
 	}
 
-	res, err := s.repo.UpdateAccessNurse(ctx, nurseId, hashedPassword)
+	res, err := s.repo.UpdateAccessNurse(nurseId, hashedPassword)
 
-	if res.RowsAffected() == 0 {
+	rowAffected, err := res.RowsAffected()
+	if rowAffected == 0 {
 		return responses.NewNotFoundError(err.Error())
 	}
 
@@ -300,15 +290,15 @@ func (s *userSvc) AccessNurse(ctx context.Context, nurseId string, accessPayload
 	return err
 }
 
-func (s *userSvc) GetUser(ctx context.Context, GetUserQueries entities.GetUserQueries) ([]entities.GetUserResponse, error) {
+func (s *userSvc) GetUser(GetUserQueries entities.GetUserQueries) ([]entities.GetUserResponse, error) {
 
 	if GetUserQueries.UserId != "" && !entities.IsValidUUID(GetUserQueries.UserId) {
 		return nil, nil
 	}
 
-	users, err := s.repo.GetUsers(ctx, GetUserQueries)
+	users, err := s.repo.GetUsers(GetUserQueries)
 	if err != nil {
-		if err == pgx.ErrNoRows {
+		if err == sql.ErrNoRows {
 			return []entities.GetUserResponse{}, nil
 		}
 		return nil, err

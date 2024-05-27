@@ -1,15 +1,15 @@
 package connections
 
 import (
+	configs "halo_suster/cfg"
 	"context"
 	"fmt"
-	configs "halo_suster/cfg"
-	"time"
 
-	"github.com/jackc/pgx/v5/pgxpool"
+	_ "github.com/jackc/pgx/v5/stdlib" // Import pgx as a stdlib driver for database/sql
+	"github.com/jmoiron/sqlx"
 )
 
-func NewPgConn(config configs.Config) (*pgxpool.Pool, error) {
+func NewPgConn(config configs.Config) (*sqlx.DB, error) {
 	ctx := context.Background()
 
 	// Construct the connection string using the provided configuration
@@ -21,30 +21,23 @@ func NewPgConn(config configs.Config) (*pgxpool.Pool, error) {
 		config.DbName,
 	)
 
-	// Parse the connection string to create a pgxpool configuration
-	dbconfig, err := pgxpool.ParseConfig(uri)
+	// Connect to the database using sqlx
+	db, err := sqlx.ConnectContext(ctx, "pgx", uri)
 	if err != nil {
-		return nil, fmt.Errorf("unable to parse pool config: %v", err)
+		return nil, fmt.Errorf("unable to connect to database: %v", err)
 	}
 
 	// Set the connection pool configuration
-	dbconfig.MaxConnLifetime = 1 * time.Hour
-	dbconfig.MaxConnIdleTime = 30 * time.Minute
-	dbconfig.HealthCheckPeriod = 5 * time.Second
-	dbconfig.MaxConns = 50 // Adjust based on your database and workload
-	dbconfig.MinConns = 10 // Adjust based on your database and workload
-
-	// Create a new connection pool with the configuration
-	pool, err := pgxpool.NewWithConfig(ctx, dbconfig)
-	if err != nil {
-		return nil, fmt.Errorf("unable to create pool: %v", err)
-	}
+	db.SetMaxOpenConns(90) // Adjust based on your database and workload
+	db.SetMaxIdleConns(50) // Adjust based on your database and workload
+	// db.SetConnMaxLifetime(1 * time.Hour)    // Set maximum connection lifetime
+	// db.SetConnMaxIdleTime(30 * time.Minute) // Set maximum idle time for a connection
 
 	// Test the connection before returning
-	if err := pool.Ping(ctx); err != nil {
-		pool.Close()
+	if err := db.PingContext(ctx); err != nil {
+		db.Close()
 		return nil, fmt.Errorf("unable to ping database: %v", err)
 	}
 
-	return pool, nil
+	return db, nil
 }
