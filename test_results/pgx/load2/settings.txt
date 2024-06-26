@@ -1,0 +1,2 @@
+maxcons = 50
+mincons = 10

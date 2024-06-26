@@ -1,0 +1,342 @@
+ulila@AzmiLL5Laptop:/dir/w3/HaloSusterTestCasesPSW3B2$ BASE_URL=http://localhost:8080 make run
+# git pull origin main;
+k6 run script.js;
+
+          /\      |‾‾| /‾‾/   /‾‾/
+     /\  /  \     |  |/  /   /  /
+    /  \/    \    |     (   /   ‾‾\
+   /          \   |  |\  \ |  (‾)  |
+  / __________ \  |__| \__\ \_____/ .io
+
+WARN[0004] `stages` was explicitly set to an empty value, running the script with 1 iteration in 1 VU
+     execution: local
+        script: script.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 1 max VUs, 10m30s max duration (incl. graceful stop):
+              * default: 1 iterations for each of 1 VUs (maxDuration: 10m0s, gracefulStop: 30s)
+
+
+     ✓ register | invalid payload | should return 400
+     ✓ register | register with correct payload | should return 201
+     ✓ register | register with correct payload | should return have a userId
+     ✓ register | register with correct payload | should return have a nip
+     ✓ register | register with correct payload | should return have a name
+     ✓ register | register with correct payload | should return have an accessToken
+     ✓ register | register with existing nip | should return 409
+     ✓ login | invalid payload | should return 400
+     ✓ login | not existing nip | should return 404
+     ✓ login | login with correct payload | should return 200
+     ✓ login | login with correct payload | should return have a userId
+     ✓ login | login with correct payload | should return have a nip
+     ✓ login | login with correct payload | should return have a name
+     ✓ login | login with correct payload | should return have an accessToken
+     ✓ nurse management post | no header | should return 401
+     ✓ nurse management post | no payload | should return 400
+     ✓ nurse management post | invalid payload | should return 400
+     ✓ nurse management post | register with correct payload | should return 201
+     ✓ nurse management post | register with correct payload | should return have a userId
+     ✓ nurse management post | register with correct payload | should return have a nip
+     ✓ nurse management post | register with correct payload | should return have a name
+     ✓ nurse management get | no header | should return 401
+     ✓ nurse management get | get all users | should return 200
+     ✓ nurse management get | get all users | should all have a userId
+     ✓ nurse management get | get all users | should all have a nip
+     ✓ nurse management get | get all users | should all have a name
+     ✓ nurse management get | get all users | should all have a createdAt
+     ✓ nurse management get | get all users | should not have more than 5 result
+     ✓ nurse management get | get all users | should have createdAt and format should be date
+     ✓ nurse management get | get all users with name | should return 200
+     ✓ nurse management get | get all users with name | should all have a userId
+     ✓ nurse management get | get all users with name | should all have a nip
+     ✓ nurse management get | get all users with name | should all have a name
+     ✓ nurse management get | get all users with name | should all have a createdAt
+     ✓ nurse management get | get all users with name | should not have more than 5 result
+     ✓ nurse management get | get all users with name | should have createdAt and format should be date
+     ✓ nurse management get | get all users with name | should have result with "a" in it
+     ✓ nurse management get | get all users with nip | should return 200
+     ✓ nurse management get | get all users with nip | should all have a userId
+     ✓ nurse management get | get all users with nip | should all have a nip
+     ✓ nurse management get | get all users with nip | should all have a name
+     ✓ nurse management get | get all users with nip | should all have a createdAt
+     ✓ nurse management get | get all users with nip | should not have more than 5 result
+     ✓ nurse management get | get all users with nip | should have createdAt and format should be date
+     ✓ nurse management get | get all users with nip | should have result with four digit of searched nip in it
+     ✓ nurse management get | get all users with it role | should return 200
+     ✓ nurse management get | get all users with it role | should all have a userId
+     ✓ nurse management get | get all users with it role | should all have a nip
+     ✓ nurse management get | get all users with it role | should all have a name
+     ✓ nurse management get | get all users with it role | should all have a createdAt
+     ✓ nurse management get | get all users with it role | should have createdAt and format should be date
+     ✓ nurse management get | get all users with it role | should not have more than 5 result
+     ✓ nurse management get | get all users with it role | should have all nip that starts with 615
+     ✓ nurse management get | get all users with nurse role | should return 200
+     ✓ nurse management get | get all users with nurse role | should all have a userId
+     ✓ nurse management get | get all users with nurse role | should all have a nip
+     ✓ nurse management get | get all users with nurse role | should all have a name
+     ✓ nurse management get | get all users with nurse role | should all have a createdAt
+     ✓ nurse management get | get all users with nurse role | should have createdAt and format should be date
+     ✓ nurse management get | get all users with nurse role | should not have more than 5 result
+     ✓ nurse management get | get all users with nurse role | should have all nip that starts with 303
+     ✓ nurse management get | get all users with createdAt asc | should return 200
+     ✓ nurse management get | get all users with createdAt asc | should all have a userId
+     ✓ nurse management get | get all users with createdAt asc | should all have a nip
+     ✓ nurse management get | get all users with createdAt asc | should all have a name
+     ✓ nurse management get | get all users with createdAt asc | should all have a createdAt
+     ✓ nurse management get | get all users with createdAt asc | should have createdAt and format should be date
+     ✓ nurse management get | get all users with createdAt asc | should not have more than 5 result
+     ✓ nurse management get | get all users with createdAt asc | should have return ordered by oldest first
+     ✓ nurse management get | get all users with limit | should return 200
+     ✓ nurse management get | get all users with limit | should all have a userId
+     ✓ nurse management get | get all users with limit | should all have a nip
+     ✓ nurse management get | get all users with limit | should all have a name
+     ✓ nurse management get | get all users with limit | should all have a createdAt
+     ✓ nurse management get | get all users with limit | should have createdAt and format should be date
+     ✓ nurse management get | get all users with limit | should not have more than 2 result
+     ✓ nurse management get | get all users with limit and offset | should return 200
+     ✓ nurse management get | get all users with limit and offset | should all have a userId
+     ✓ nurse management get | get all users with limit and offset | should all have a nip
+     ✓ nurse management get | get all users with limit and offset | should all have a name
+     ✓ nurse management get | get all users with limit and offset | should all have a createdAt
+     ✓ nurse management get | get all users with limit and offset | should have createdAt and format should be date
+     ✓ nurse management get | get all users with limit and offset | should not have more than 2 result
+     ✓ nurse management get | get all users with limit and offset | should have different data from offset 0
+     ✓ nurse management put | get all users with nurse role | should return 200
+     ✓ nurse management put | get all users with it role | should return 200
+     ✓ nurse management put | no header | should return 401
+     ✓ nurse management put | no path value | should return 404
+     ✓ nurse management put | no payload | should return 400
+     ✓ nurse management put | invalid payload | should return 400
+     ✓ nurse management put | editing an it | should return 404
+     ✓ nurse management put | edit with the existing nip | should return 409
+     ✓ nurse management put | editing nurse | should return 200
+     ✓ nurse management put | get user by userId after edit | should return 200
+     ✓ nurse management put | get user by userId after edit | should all have a userId
+     ✓ nurse management put | get user by userId after edit | should have the same nip after edit
+     ✓ nurse management put | get user by userId after edit | should have the same name after edit
+     ✓ nurse management delete | get all users with nurse role | should return 200
+     ✓ nurse management delete | get all users with it role | should return 200
+     ✓ nurse management delete | no header | should return 401
+     ✓ nurse management delete | no path value | should return 404
+     ✓ nurse management delete | deleting an it | should return 404
+     ✓ nurse management delete | deleting nurse | should return 200
+     ✓ nurse management delete | get user by userId after edit | should return 200
+     ✓ nurse management delete | get user by userId after edit | should have no data
+     ✓ nurse management access post | get all users with nurse role | should return 200
+     ✓ nurse management access post | invalid payload | should return 400
+     ✓ nurse management access post | give nurse access | should return 200
+     ✓ nurse management login | invalid payload | should return 400
+     ✓ nurse management login | login with correct payload | should return 200
+     ✓ medical patient post | no header | should return 401
+     ✓ medical patient post | no payload | should return 400
+     ✓ medical patient post | invalid payload | should return 400
+     ✓ medical patient post | add medical patient | should return 201
+     ✓ medical patient get | no header | should return 401
+     ✓ medical patient get | add medical patient | should return 201
+     ✓ medical patient get | get all patient | should return 200
+     ✓ medical patient get | get all patient | should all have a identityNumber
+     ✓ medical patient get | get all patient | should all have phoneNumber
+     ✓ medical patient get | get all patient | should all have a name
+     ✓ medical patient get | get all patient | should have birthDate and format should be date
+     ✓ medical patient get | get all patient | should all have gender
+     ✓ medical patient get | get all patient | should all have a createdAt
+     ✓ medical patient get | get all patient | should have createdAt and format should be date
+     ✓ medical patient get | get all patient | should not have more than 5 result
+     ✓ medical patient get | get all patient with name | should return 200
+     ✓ medical patient get | get all patient with name | should all have a identityNumber
+     ✓ medical patient get | get all patient with name | should all have phoneNumber
+     ✓ medical patient get | get all patient with name | should all have a name
+     ✓ medical patient get | get all patient with name | should have birthDate and format should be date
+     ✓ medical patient get | get all patient with name | should all have gender
+     ✓ medical patient get | get all patient with name | should all have a createdAt
+     ✓ medical patient get | get all patient with name | should have createdAt and format should be date
+     ✓ medical patient get | get all patient with name | should not have more than 5 result
+     ✓ medical patient get | get all patient with name | should have result with "a" in it
+     ✓ medical patient get | get all patient with identityNumber | should return 200
+     ✓ medical patient get | get all patient with identityNumber | should all have a identityNumber
+     ✓ medical patient get | get all patient with identityNumber | should all have phoneNumber
+     ✓ medical patient get | get all patient with identityNumber | should all have a name
+     ✓ medical patient get | get all patient with identityNumber | should have birthDate and format should be date
+     ✓ medical patient get | get all patient with identityNumber | should all have gender
+     ✓ medical patient get | get all patient with identityNumber | should all have a createdAt
+     ✓ medical patient get | get all patient with identityNumber | should have createdAt and format should be date
+     ✓ medical patient get | get all patient with identityNumber | should not have more than 5 result
+     ✓ medical patient get | get all patient with identityNumber | should have result with four digit of searched identityNumber in it
+     ✓ medical patient get | get all patient with phoneNumber | should return 200
+     ✓ medical patient get | get all patient with phoneNumber | should all have a identityNumber
+     ✓ medical patient get | get all patient with phoneNumber | should all have phoneNumber
+     ✓ medical patient get | get all patient with phoneNumber | should all have a name
+     ✓ medical patient get | get all patient with phoneNumber | should have birthDate and format should be date
+     ✓ medical patient get | get all patient with phoneNumber | should all have gender
+     ✓ medical patient get | get all patient with phoneNumber | should all have a createdAt
+     ✓ medical patient get | get all patient with phoneNumber | should have createdAt and format should be date
+     ✓ medical patient get | get all patient with phoneNumber | should not have more than 5 result
+     ✓ medical patient get | get all patient with phoneNumber | should have result with four digit of searched phoneNumber in it
+     ✓ medical patient get | get all patient with createdAt asc | should return 200
+     ✓ medical patient get | get all patient with createdAt asc | should all have a identityNumber
+     ✓ medical patient get | get all patient with createdAt asc | should all have phoneNumber
+     ✓ medical patient get | get all patient with createdAt asc | should all have a name
+     ✓ medical patient get | get all patient with createdAt asc | should have birthDate and format should be date
+     ✓ medical patient get | get all patient with createdAt asc | should all have gender
+     ✓ medical patient get | get all patient with createdAt asc | should all have a createdAt
+     ✓ medical patient get | get all patient with createdAt asc | should have createdAt and format should be date
+     ✓ medical patient get | get all patient with createdAt asc | should not have more than 5 result
+     ✓ medical patient get | get all patient with createdAt asc | should have return ordered by oldest first
+     ✓ medical patient get | get all patient with limit | should return 200
+     ✓ medical patient get | get all patient with limit | should all have a identityNumber
+     ✓ medical patient get | get all patient with limit | should all have phoneNumber
+     ✓ medical patient get | get all patient with limit | should all have a name
+     ✓ medical patient get | get all patient with limit | should have birthDate and format should be date
+     ✓ medical patient get | get all patient with limit | should all have gender
+     ✓ medical patient get | get all patient with limit | should all have a createdAt
+     ✓ medical patient get | get all patient with limit | should have createdAt and format should be date
+     ✓ medical patient get | get all patient with limit | should not have more than 2 result
+     ✓ medical patient get | get all patient with limit and offset | should return 200
+     ✓ medical patient get | get all patient with limit and offset | should all have a identityNumber
+     ✓ medical patient get | get all patient with limit and offset | should all have phoneNumber
+     ✓ medical patient get | get all patient with limit and offset | should all have a name
+     ✓ medical patient get | get all patient with limit and offset | should have birthDate and format should be date
+     ✓ medical patient get | get all patient with limit and offset | should all have gender
+     ✓ medical patient get | get all patient with limit and offset | should all have a createdAt
+     ✓ medical patient get | get all patient with limit and offset | should have createdAt and format should be date
+     ✓ medical patient get | get all patient with limit and offset | should not have more than 2 result
+     ✓ medical patient get | get all patient with limit and offset | should have different data from offset 0
+     ✓ medical record post | add medical patient for record | should return 201
+     ✓ medical record post | get all patient | should return 200
+     ✓ medical record post | no header | should return 401
+     ✓ medical record post | no payload | should return 400
+     ✓ medical record post | invalid payload | should return 400
+     ✓ medical record post | not exists identity number | should return 404
+     ✓ medical record post | add medical record | should return 201
+     ✓ medical record get | no header | should return 401
+     ✓ medical record get | get all patient | should return 200
+     ✓ medical record get | add medical record | should return 201
+     ✓ medical record get | get all record | should return 200
+     ✓ medical record get | get all record | should all have a identityDetail
+     ✓ medical record get | get all record | should all have a identityDetail.identityNumber
+     ✓ medical record get | get all record | should all have a identityDetail.phoneNumber
+     ✓ medical record get | get all record | should all have a identityDetail.name
+     ✓ medical record get | get all record | should all have a identityDetail.birthDate and the format should be date
+     ✓ medical record get | get all record | should all have a identityDetail.gender
+     ✓ medical record get | get all record | should all have a identityDetail.identityCardScanImg
+     ✓ medical record get | get all record | should all have a symptoms
+     ✓ medical record get | get all record | should all have a medications
+     ✓ medical record get | get all record | should all have a createdBy
+     ✓ medical record get | get all record | should all have a createdBy.nip
+     ✓ medical record get | get all record | should all have a createdBy.name
+     ✓ medical record get | get all record | should all have a createdBy.userId
+     ✓ medical record get | get all record | should have createdAt and format should be date
+     ✓ medical record get | get all record | should not have more than 5 result
+     ✓ medical record get | get all record with createdBy.userId | should return 200
+     ✓ medical record get | get all record with createdBy.userId | should all have a identityDetail
+     ✓ medical record get | get all record with createdBy.userId | should all have a identityDetail.identityNumber
+     ✓ medical record get | get all record with createdBy.userId | should all have a identityDetail.phoneNumber
+     ✓ medical record get | get all record with createdBy.userId | should all have a identityDetail.name
+     ✓ medical record get | get all record with createdBy.userId | should all have a identityDetail.birthDate and the format should be date
+     ✓ medical record get | get all record with createdBy.userId | should all have a identityDetail.gender
+     ✓ medical record get | get all record with createdBy.userId | should all have a identityDetail.identityCardScanImg
+     ✓ medical record get | get all record with createdBy.userId | should all have a symptoms
+     ✓ medical record get | get all record with createdBy.userId | should all have a medications
+     ✓ medical record get | get all record with createdBy.userId | should all have a createdBy
+     ✓ medical record get | get all record with createdBy.userId | should all have a createdBy.name
+     ✓ medical record get | get all record with createdBy.userId | should all have a createdBy.nip
+     ✓ medical record get | get all record with createdBy.userId | should all have a createdBy.userId
+     ✓ medical record get | get all record with createdBy.userId | should have createdAt and format should be date
+     ✓ medical record get | get all record with createdBy.userId | should not have more than 5 result
+     ✓ medical record get | get all record with nip | should return 200
+     ✓ medical record get | get all record with nip | should all have a identityDetail
+     ✓ medical record get | get all record with nip | should all have a identityDetail.identityNumber
+     ✓ medical record get | get all record with nip | should all have a identityDetail.phoneNumber
+     ✓ medical record get | get all record with nip | should all have a identityDetail.name
+     ✓ medical record get | get all record with nip | should all have a identityDetail.birthDate and the format should be date
+     ✓ medical record get | get all record with nip | should all have a identityDetail.gender
+     ✓ medical record get | get all record with nip | should all have a identityDetail.identityCardScanImg
+     ✓ medical record get | get all record with nip | should all have a symptoms
+     ✓ medical record get | get all record with nip | should all have a medications
+     ✓ medical record get | get all record with nip | should all have a createdBy
+     ✓ medical record get | get all record with nip | should all have a createdBy.name
+     ✓ medical record get | get all record with nip | should all have a createdBy.nip
+     ✓ medical record get | get all record with nip | should all have a createdBy.userId
+     ✓ medical record get | get all record with nip | should have createdAt and format should be date
+     ✓ medical record get | get all record with nip | should not have more than 5 result
+     ✓ medical record get | get all record with createdAt asc | should return 200
+     ✓ medical record get | get all record with createdAt asc | should all have a identityDetail
+     ✓ medical record get | get all record with createdAt asc | should all have a identityDetail.identityNumber
+     ✓ medical record get | get all record with createdAt asc | should all have a identityDetail.phoneNumber
+     ✓ medical record get | get all record with createdAt asc | should all have a identityDetail.name
+     ✓ medical record get | get all record with createdAt asc | should all have a identityDetail.birthDate and the format should be date
+     ✓ medical record get | get all record with createdAt asc | should all have a identityDetail.gender
+     ✓ medical record get | get all record with createdAt asc | should all have a identityDetail.identityCardScanImg
+     ✓ medical record get | get all record with createdAt asc | should all have a symptoms
+     ✓ medical record get | get all record with createdAt asc | should all have a medications
+     ✓ medical record get | get all record with createdAt asc | should all have a createdBy
+     ✓ medical record get | get all record with createdAt asc | should all have a createdBy.name
+     ✓ medical record get | get all record with createdAt asc | should all have a createdBy.nip
+     ✓ medical record get | get all record with createdAt asc | should all have a createdBy.userId
+     ✓ medical record get | get all record with createdAt asc | should have createdAt and format should be date
+     ✓ medical record get | get all record with createdAt asc | should not have more than 5 result
+     ✓ medical record get | get all record with createdAt asc | should have return ordered by oldest first
+     ✓ medical record get | get all record with limit | should return 200
+     ✓ medical record get | get all record with limit | should all have a identityDetail
+     ✓ medical record get | get all record with limit | should all have a identityDetail.identityNumber
+     ✓ medical record get | get all record with limit | should all have a identityDetail.phoneNumber
+     ✓ medical record get | get all record with limit | should all have a identityDetail.name
+     ✓ medical record get | get all record with limit | should all have a identityDetail.birthDate and the format should be date
+     ✓ medical record get | get all record with limit | should all have a identityDetail.gender
+     ✓ medical record get | get all record with limit | should all have a identityDetail.identityCardScanImg
+     ✓ medical record get | get all record with limit | should all have a symptoms
+     ✓ medical record get | get all record with limit | should all have a medications
+     ✓ medical record get | get all record with limit | should all have a createdBy
+     ✓ medical record get | get all record with limit | should all have a createdBy.name
+     ✓ medical record get | get all record with limit | should all have a createdBy.nip
+     ✓ medical record get | get all record with limit | should all have a createdBy.userId
+     ✓ medical record get | get all record with limit | should have createdAt and format should be date
+     ✓ medical record get | get all record with limit | should not have more than 2 result
+     ✓ medical record get | get all record with limit and offset | should return 200
+     ✓ medical record get | get all record with limit and offset | should all have a identityDetail
+     ✓ medical record get | get all record with limit and offset | should all have a identityDetail.identityNumber
+     ✓ medical record get | get all record with limit and offset | should all have a identityDetail.phoneNumber
+     ✓ medical record get | get all record with limit and offset | should all have a identityDetail.name
+     ✓ medical record get | get all record with limit and offset | should all have a identityDetail.birthDate and the format should be date
+     ✓ medical record get | get all record with limit and offset | should all have a identityDetail.gender
+     ✓ medical record get | get all record with limit and offset | should all have a identityDetail.identityCardScanImg
+     ✓ medical record get | get all record with limit and offset | should all have a symptoms
+     ✓ medical record get | get all record with limit and offset | should all have a medications
+     ✓ medical record get | get all record with limit and offset | should all have a createdBy
+     ✓ medical record get | get all record with limit and offset | should all have a createdBy.name
+     ✓ medical record get | get all record with limit and offset | should all have a createdBy.nip
+     ✓ medical record get | get all record with limit and offset | should all have a createdBy.userId
+     ✓ medical record get | get all record with limit and offset | should have createdAt and format should be date
+     ✓ medical record get | get all record with limit and offset | should not have more than 2 result
+     ✓ medical record get | get all record with limit and offset | should have different data from offset 0
+     ✓ image post |  | image post | post upload file empty auth should return 401
+     ✓ image post |  | image post | post upload file empty file should return 400
+     ✓ image post |  | image post | correct file should return 200
+     ✓ image post |  | image post | correct file should have imageUrl
+
+     █ setup
+
+     █ teardown
+
+     checks.........................: 100.00% ✓ 549       ✗ 0
+     data_received..................: 144 kB  81 kB/s
+     data_sent......................: 145 kB  82 kB/s
+     http_req_blocked...............: avg=2.64µs  min=591ns    med=1.3µs    max=346.09µs p(90)=2.2µs   p(95)=2.57µs
+     http_req_connecting............: avg=651ns   min=0s       med=0s       max=199.89µs p(90)=0s      p(95)=0s
+     http_req_duration..............: avg=2.39ms  min=127.33µs med=247.88µs max=362.89ms p(90)=3.81ms  p(95)=4.29ms
+       { expected_response:true }...: avg=9.52ms  min=336.14µs med=3.77ms   max=362.89ms p(90)=16.91ms p(95)=17.93ms
+     http_req_failed................: 77.85%  ✓ 239       ✗ 68
+     http_req_receiving.............: avg=44.8µs  min=18.39µs  med=36.46µs  max=152.47µs p(90)=82.69µs p(95)=100µs
+     http_req_sending...............: avg=13.5µs  min=3.2µs    med=7.09µs   max=1.01ms   p(90)=21.37µs p(95)=25.96µs
+     http_req_tls_handshaking.......: avg=0s      min=0s       med=0s       max=0s       p(90)=0s      p(95)=0s
+     http_req_waiting...............: avg=2.33ms  min=98.52µs  med=195.02µs max=362.77ms p(90)=3.76ms  p(95)=4.24ms
+     http_reqs......................: 307     172.47942/s
+     iteration_duration.............: avg=591.4ms min=3.96µs   med=4.28µs   max=1.77s    p(90)=1.41s   p(95)=1.59s
+     iterations.....................: 1       0.561822/s
+     vus............................: 1       min=1       max=1
+     vus_max........................: 1       min=1       max=1
+
+
+running (00m01.8s), 0/1 VUs, 1 complete and 0 interrupted iterations
+default ✓ [======================================] 1 VUs  00m01.8s/10m0s  1/1 iters, 1 per VU
+ulila@AzmiLL5Laptop:/dir/w3/HaloSusterTestCasesPSW3B2$

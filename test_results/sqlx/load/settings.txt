@@ -1,0 +1,2 @@
+maxopenconn = 90
+maxiddlecon = 50

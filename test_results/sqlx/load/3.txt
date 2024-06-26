@@ -1,0 +1,469 @@
+     ✓ register | invalid payload | should return 400
+     ✓ register | register with correct payload | should return 201
+     ✓ register | register with correct payload | should return have a userId
+     ✓ register | register with correct payload | should return have a nip
+     ✓ register | register with correct payload | should return have a name
+     ✓ register | register with correct payload | should return have an accessToken
+     ✓ register | register with existing nip | should return 409
+     ✗ login | login with correct payload | should return 200
+      ↳  91% — ✓ 1964 / ✗ 182
+     ✗ login | login with correct payload | should return have a userId
+      ↳  91% — ✓ 1964 / ✗ 182
+     ✗ login | login with correct payload | should return have a nip
+      ↳  91% — ✓ 1964 / ✗ 182
+     ✗ login | login with correct payload | should return have a name
+      ↳  91% — ✓ 1964 / ✗ 182
+     ✗ login | login with correct payload | should return have an accessToken
+      ↳  91% — ✓ 1964 / ✗ 182
+     ✓ nurse management post | register with correct payload | should return 201
+     ✓ nurse management post | register with correct payload | should return have a userId
+     ✓ nurse management post | register with correct payload | should return have a nip
+     ✓ nurse management post | register with correct payload | should return have a name
+     ✗ nurse management get | get all users | should return 200
+      ↳  99% — ✓ 36590 / ✗ 2
+     ✗ nurse management get | get all users | should all have a userId
+      ↳  99% — ✓ 36590 / ✗ 2
+     ✗ nurse management get | get all users | should all have a nip
+      ↳  99% — ✓ 36590 / ✗ 2
+     ✗ nurse management get | get all users | should all have a name
+      ↳  99% — ✓ 36590 / ✗ 2
+     ✗ nurse management get | get all users | should all have a createdAt
+      ↳  99% — ✓ 36590 / ✗ 2
+     ✗ nurse management get | get all users | should not have more than 5 result
+      ↳  99% — ✓ 36590 / ✗ 2
+     ✗ nurse management get | get all users | should have createdAt and format should be date
+      ↳  99% — ✓ 36590 / ✗ 2
+     ✗ nurse management get | get all users with name | should return 200
+      ↳  99% — ✓ 36589 / ✗ 1
+     ✗ nurse management get | get all users with name | should all have a userId
+      ↳  99% — ✓ 36589 / ✗ 1
+     ✗ nurse management get | get all users with name | should all have a nip
+      ↳  99% — ✓ 36589 / ✗ 1
+     ✗ nurse management get | get all users with name | should all have a name
+      ↳  99% — ✓ 36589 / ✗ 1
+     ✗ nurse management get | get all users with name | should all have a createdAt
+      ↳  99% — ✓ 36589 / ✗ 1
+     ✗ nurse management get | get all users with name | should not have more than 5 result
+      ↳  99% — ✓ 36589 / ✗ 1
+     ✗ nurse management get | get all users with name | should have createdAt and format should be date
+      ↳  99% — ✓ 36589 / ✗ 1
+     ✗ nurse management get | get all users with name | should have result with "a" in it
+      ↳  99% — ✓ 36589 / ✗ 1
+     ✗ nurse management get | get all users with nip | should return 200
+      ↳  99% — ✓ 36587 / ✗ 2
+     ✗ nurse management get | get all users with nip | should all have a userId
+      ↳  99% — ✓ 36587 / ✗ 2
+     ✗ nurse management get | get all users with nip | should all have a nip
+      ↳  99% — ✓ 36587 / ✗ 2
+     ✗ nurse management get | get all users with nip | should all have a name
+      ↳  99% — ✓ 36587 / ✗ 2
+     ✗ nurse management get | get all users with nip | should all have a createdAt
+      ↳  99% — ✓ 36587 / ✗ 2
+     ✗ nurse management get | get all users with nip | should not have more than 5 result
+      ↳  99% — ✓ 36587 / ✗ 2
+     ✗ nurse management get | get all users with nip | should have createdAt and format should be date
+      ↳  99% — ✓ 36587 / ✗ 2
+     ✗ nurse management get | get all users with nip | should have result with four digit of searched nip in it
+      ↳  99% — ✓ 36587 / ✗ 2
+     ✓ nurse management get | get all users with it role | should return 200
+     ✓ nurse management get | get all users with it role | should all have a userId
+     ✓ nurse management get | get all users with it role | should all have a nip
+     ✓ nurse management get | get all users with it role | should all have a name
+     ✓ nurse management get | get all users with it role | should all have a createdAt
+     ✓ nurse management get | get all users with it role | should have createdAt and format should be date
+     ✓ nurse management get | get all users with it role | should not have more than 5 result
+     ✓ nurse management get | get all users with it role | should have all nip that starts with 615
+     ✗ nurse management get | get all users with nurse role | should return 200
+      ↳  99% — ✓ 36586 / ✗ 1
+     ✗ nurse management get | get all users with nurse role | should all have a userId
+      ↳  99% — ✓ 36586 / ✗ 1
+     ✗ nurse management get | get all users with nurse role | should all have a nip
+      ↳  99% — ✓ 36586 / ✗ 1
+     ✗ nurse management get | get all users with nurse role | should all have a name
+      ↳  99% — ✓ 36586 / ✗ 1
+     ✗ nurse management get | get all users with nurse role | should all have a createdAt
+      ↳  99% — ✓ 36586 / ✗ 1
+     ✗ nurse management get | get all users with nurse role | should have createdAt and format should be date
+      ↳  99% — ✓ 36586 / ✗ 1
+     ✗ nurse management get | get all users with nurse role | should not have more than 5 result
+      ↳  99% — ✓ 36586 / ✗ 1
+     ✗ nurse management get | get all users with nurse role | should have all nip that starts with 303
+      ↳  99% — ✓ 36586 / ✗ 1
+     ✗ nurse management get | get all users with createdAt asc | should return 200
+      ↳  99% — ✓ 36585 / ✗ 1
+     ✗ nurse management get | get all users with createdAt asc | should all have a userId
+      ↳  99% — ✓ 36585 / ✗ 1
+     ✗ nurse management get | get all users with createdAt asc | should all have a nip
+      ↳  99% — ✓ 36585 / ✗ 1
+     ✗ nurse management get | get all users with createdAt asc | should all have a name
+      ↳  99% — ✓ 36585 / ✗ 1
+     ✗ nurse management get | get all users with createdAt asc | should all have a createdAt
+      ↳  99% — ✓ 36585 / ✗ 1
+     ✗ nurse management get | get all users with createdAt asc | should have createdAt and format should be date
+      ↳  99% — ✓ 36585 / ✗ 1
+     ✗ nurse management get | get all users with createdAt asc | should not have more than 5 result
+      ↳  99% — ✓ 36585 / ✗ 1
+     ✗ nurse management get | get all users with createdAt asc | should have return ordered by oldest first
+      ↳  99% — ✓ 36585 / ✗ 1
+     ✗ nurse management get | get all users with limit | should return 200
+      ↳  99% — ✓ 36582 / ✗ 3
+     ✗ nurse management get | get all users with limit | should all have a userId
+      ↳  99% — ✓ 36582 / ✗ 3
+     ✗ nurse management get | get all users with limit | should all have a nip
+      ↳  99% — ✓ 36582 / ✗ 3
+     ✗ nurse management get | get all users with limit | should all have a name
+      ↳  99% — ✓ 36582 / ✗ 3
+     ✗ nurse management get | get all users with limit | should all have a createdAt
+      ↳  99% — ✓ 36582 / ✗ 3
+     ✗ nurse management get | get all users with limit | should have createdAt and format should be date
+      ↳  99% — ✓ 36582 / ✗ 3
+     ✗ nurse management get | get all users with limit | should not have more than 2 result
+      ↳  99% — ✓ 36582 / ✗ 3
+     ✓ nurse management put | get all users with nurse role | should return 200
+     ✓ nurse management put | get all users with it role | should return 200
+     ✓ nurse management put | editing nurse | should return 200
+     ✓ nurse management put | get user by userId after edit | should return 200
+     ✓ nurse management put | get user by userId after edit | should all have a userId
+     ✗ nurse management put | get user by userId after edit | should have the same nip after edit
+      ↳  99% — ✓ 130 / ✗ 1
+     ✗ nurse management put | get user by userId after edit | should have the same name after edit
+      ↳  99% — ✓ 130 / ✗ 1
+     ✓ nurse management delete | get all users with nurse role | should return 200
+     ✓ nurse management delete | get all users with it role | should return 200
+     ✓ nurse management delete | no header | should return 401
+     ✓ nurse management delete | no path value | should return 404
+     ✓ nurse management delete | deleting an it | should return 404
+     ✗ nurse management delete | deleting nurse | should return 200
+      ↳  96% — ✓ 127 / ✗ 4
+     ✓ nurse management delete | get user by userId after edit | should return 200
+     ✓ nurse management delete | get user by userId after edit | should have no data
+     ✓ nurse management access post | get all users with nurse role | should return 200
+     ✓ nurse management access post | invalid payload | should return 400
+     ✗ nurse management access post | give nurse access | should return 200
+      ↳  95% — ✓ 267 / ✗ 13
+     ✗ nurse management login | login with correct payload | should return 200
+      ↳  83% — ✓ 1392 / ✗ 281
+     ✗ image post |  | image post | correct file should return 200
+      ↳  82% — ✓ 1142 / ✗ 250
+     ✗ image post |  | image post | correct file should have imageUrl
+      ↳  82% — ✓ 1142 / ✗ 250
+     ✗ medical record post | get all patient | should return 200
+      ↳  99% — ✓ 1832 / ✗ 9
+     ✗ medical patient post | add medical patient | should return 201
+      ↳  96% — ✓ 2829 / ✗ 109
+     ✗ medical patient get | get all patient | should return 200
+      ↳  99% — ✓ 4025 / ✗ 2
+     ✗ medical patient get | get all patient | should all have a identityNumber
+      ↳  99% — ✓ 4025 / ✗ 2
+     ✗ medical patient get | get all patient | should all have phoneNumber
+      ↳  99% — ✓ 4025 / ✗ 2
+     ✗ medical patient get | get all patient | should all have a name
+      ↳  99% — ✓ 4025 / ✗ 2
+     ✗ medical patient get | get all patient | should have birthDate and format should be date
+      ↳  99% — ✓ 4025 / ✗ 2
+     ✗ medical patient get | get all patient | should all have gender
+      ↳  99% — ✓ 4025 / ✗ 2
+     ✗ medical patient get | get all patient | should all have a createdAt
+      ↳  99% — ✓ 4025 / ✗ 2
+     ✗ medical patient get | get all patient | should have createdAt and format should be date
+      ↳  99% — ✓ 4025 / ✗ 2
+     ✗ medical patient get | get all patient | should not have more than 5 result
+      ↳  99% — ✓ 4025 / ✗ 2
+     ✗ medical patient get | get all patient with name | should return 200
+      ↳  99% — ✓ 4023 / ✗ 2
+     ✗ medical patient get | get all patient with name | should all have a identityNumber
+      ↳  99% — ✓ 4023 / ✗ 2
+     ✗ medical patient get | get all patient with name | should all have phoneNumber
+      ↳  99% — ✓ 4023 / ✗ 2
+     ✗ medical patient get | get all patient with name | should all have a name
+      ↳  99% — ✓ 4023 / ✗ 2
+     ✗ medical patient get | get all patient with name | should have birthDate and format should be date
+      ↳  99% — ✓ 4023 / ✗ 2
+     ✗ medical patient get | get all patient with name | should all have gender
+      ↳  99% — ✓ 4023 / ✗ 2
+     ✗ medical patient get | get all patient with name | should all have a createdAt
+      ↳  99% — ✓ 4023 / ✗ 2
+     ✗ medical patient get | get all patient with name | should have createdAt and format should be date
+      ↳  99% — ✓ 4023 / ✗ 2
+     ✗ medical patient get | get all patient with name | should not have more than 5 result
+      ↳  99% — ✓ 4023 / ✗ 2
+     ✗ medical patient get | get all patient with name | should have result with "a" in it
+      ↳  99% — ✓ 4023 / ✗ 2
+     ✗ medical patient get | get all patient with phoneNumber | should return 200
+      ↳  99% — ✓ 4019 / ✗ 4
+     ✗ medical patient get | get all patient with phoneNumber | should all have a identityNumber
+      ↳  99% — ✓ 4019 / ✗ 4
+     ✗ medical patient get | get all patient with phoneNumber | should all have phoneNumber
+      ↳  99% — ✓ 4019 / ✗ 4
+     ✗ medical patient get | get all patient with phoneNumber | should all have a name
+      ↳  99% — ✓ 4019 / ✗ 4
+     ✗ medical patient get | get all patient with phoneNumber | should have birthDate and format should be date
+      ↳  99% — ✓ 4019 / ✗ 4
+     ✗ medical patient get | get all patient with phoneNumber | should all have gender
+      ↳  99% — ✓ 4019 / ✗ 4
+     ✗ medical patient get | get all patient with phoneNumber | should all have a createdAt
+      ↳  99% — ✓ 4019 / ✗ 4
+     ✗ medical patient get | get all patient with phoneNumber | should have createdAt and format should be date
+      ↳  99% — ✓ 4019 / ✗ 4
+     ✗ medical patient get | get all patient with phoneNumber | should not have more than 5 result
+      ↳  99% — ✓ 4018 / ✗ 5
+     ✗ medical patient get | get all patient with phoneNumber | should have result with four digit of searched phoneNumber in it
+      ↳  99% — ✓ 4019 / ✗ 4
+     ✗ medical patient get | get all patient with createdAt asc | should return 200
+      ↳  99% — ✓ 4014 / ✗ 5
+     ✗ medical patient get | get all patient with createdAt asc | should all have a identityNumber
+      ↳  99% — ✓ 4014 / ✗ 5
+     ✗ medical patient get | get all patient with createdAt asc | should all have phoneNumber
+      ↳  99% — ✓ 4014 / ✗ 5
+     ✗ medical patient get | get all patient with createdAt asc | should all have a name
+      ↳  99% — ✓ 4014 / ✗ 5
+     ✗ medical patient get | get all patient with createdAt asc | should have birthDate and format should be date
+      ↳  99% — ✓ 4014 / ✗ 5
+     ✗ medical patient get | get all patient with createdAt asc | should all have gender
+      ↳  99% — ✓ 4014 / ✗ 5
+     ✗ medical patient get | get all patient with createdAt asc | should all have a createdAt
+      ↳  99% — ✓ 4014 / ✗ 5
+     ✗ medical patient get | get all patient with createdAt asc | should have createdAt and format should be date
+      ↳  99% — ✓ 4014 / ✗ 5
+     ✗ medical patient get | get all patient with createdAt asc | should not have more than 5 result
+      ↳  99% — ✓ 4014 / ✗ 5
+     ✗ medical patient get | get all patient with createdAt asc | should have return ordered by oldest first
+      ↳  99% — ✓ 4014 / ✗ 5
+     ✗ medical patient get | get all patient with limit | should return 200
+      ↳  99% — ✓ 4010 / ✗ 4
+     ✗ medical patient get | get all patient with limit | should all have a identityNumber
+      ↳  99% — ✓ 4010 / ✗ 4
+     ✗ medical patient get | get all patient with limit | should all have phoneNumber
+      ↳  99% — ✓ 4010 / ✗ 4
+     ✗ medical patient get | get all patient with limit | should all have a name
+      ↳  99% — ✓ 4010 / ✗ 4
+     ✗ medical patient get | get all patient with limit | should have birthDate and format should be date
+      ↳  99% — ✓ 4010 / ✗ 4
+     ✗ medical patient get | get all patient with limit | should all have gender
+      ↳  99% — ✓ 4010 / ✗ 4
+     ✗ medical patient get | get all patient with limit | should all have a createdAt
+      ↳  99% — ✓ 4010 / ✗ 4
+     ✗ medical patient get | get all patient with limit | should have createdAt and format should be date
+      ↳  99% — ✓ 4010 / ✗ 4
+     ✗ medical patient get | get all patient with limit | should not have more than 2 result
+      ↳  99% — ✓ 4010 / ✗ 4
+     ✗ medical record post | add medical record | should return 201
+      ↳  99% — ✓ 1823 / ✗ 7
+     ✗ medical record get | get all record | should return 200
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a identityDetail
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a identityDetail.identityNumber
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a identityDetail.phoneNumber
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a identityDetail.name
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a identityDetail.birthDate and the format should be date
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a identityDetail.gender
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a identityDetail.identityCardScanImg
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a symptoms
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a medications
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a createdBy
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a createdBy.nip
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a createdBy.name
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should all have a createdBy.userId
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should have createdAt and format should be date
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record | should not have more than 5 result
+      ↳  98% — ✓ 2654 / ✗ 31
+     ✗ medical record get | get all record with createdBy.userId | should return 200
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a identityDetail
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a identityDetail.identityNumber
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a identityDetail.phoneNumber
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a identityDetail.name
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a identityDetail.birthDate and the format should be date
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a identityDetail.gender
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a identityDetail.identityCardScanImg
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a symptoms
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a medications
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a createdBy
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a createdBy.name
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a createdBy.nip
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should all have a createdBy.userId
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should have createdAt and format should be date
+      ↳  99% — ✓ 2643 / ✗ 11
+     ✗ medical record get | get all record with createdBy.userId | should not have more than 5 result
+      ↳  50% — ✓ 1333 / ✗ 1321
+     ✗ medical record get | get all record with nip | should return 200
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a identityDetail
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a identityDetail.identityNumber
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a identityDetail.phoneNumber
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a identityDetail.name
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a identityDetail.birthDate and the format should be date
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a identityDetail.gender
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a identityDetail.identityCardScanImg
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a symptoms
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a medications
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a createdBy
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a createdBy.name
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a createdBy.nip
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should all have a createdBy.userId
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should have createdAt and format should be date
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with nip | should not have more than 5 result
+      ↳  98% — ✓ 2604 / ✗ 39
+     ✗ medical record get | get all record with createdAt asc | should return 200
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a identityDetail
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a identityDetail.identityNumber
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a identityDetail.phoneNumber
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a identityDetail.name
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a identityDetail.birthDate and the format should be date
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a identityDetail.gender
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a identityDetail.identityCardScanImg
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a symptoms
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a medications
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a createdBy
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a createdBy.name
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a createdBy.nip
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should all have a createdBy.userId
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should have createdAt and format should be date
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should not have more than 5 result
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with createdAt asc | should have return ordered by oldest first
+      ↳  98% — ✓ 2577 / ✗ 27
+     ✗ medical record get | get all record with limit | should return 200
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a identityDetail
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a identityDetail.identityNumber
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a identityDetail.phoneNumber
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a identityDetail.name
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a identityDetail.birthDate and the format should be date
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a identityDetail.gender
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a identityDetail.identityCardScanImg
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a symptoms
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a medications
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a createdBy
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a createdBy.name
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a createdBy.nip
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should all have a createdBy.userId
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should have createdAt and format should be date
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✗ medical record get | get all record with limit | should not have more than 2 result
+      ↳  99% — ✓ 2571 / ✗ 6
+     ✓ nurse management post | no header | should return 401
+     ✓ nurse management post | no payload | should return 400
+     ✓ nurse management post | invalid payload | should return 400
+     ✓ nurse management put | no header | should return 401
+     ✓ nurse management put | no path value | should return 404
+     ✓ nurse management put | no payload | should return 400
+     ✓ nurse management put | invalid payload | should return 400
+     ✓ nurse management put | editing an it | should return 404
+     ✓ nurse management put | edit with the existing nip | should return 409
+     ✓ image post |  | image post | post upload file empty auth should return 401
+     ✓ image post |  | image post | post upload file empty file should return 400
+     ✓ medical record post | no header | should return 401
+     ✓ medical record post | no payload | should return 400
+     ✓ medical record post | invalid payload | should return 400
+     ✗ medical record post | not exists identity number | should return 404
+      ↳  99% — ✓ 1095 / ✗ 1
+     ✓ medical record get | no header | should return 401
+     ✓ login | invalid payload | should return 400
+     ✓ login | not existing nip | should return 404
+     ✓ medical patient post | no header | should return 401
+     ✓ medical patient post | no payload | should return 400
+     ✓ medical patient post | invalid payload | should return 400
+
+     █ setup
+
+       ✓ register | register with correct payload | should return 201
+       ✓ register | register with correct payload | should return have a userId
+       ✓ register | register with correct payload | should return have a nip
+       ✓ register | register with correct payload | should return have a name
+       ✓ register | register with correct payload | should return have an accessToken
+
+     █ teardown
+
+     checks.........................: 99.78% ✓ 2461578     ✗ 5237
+     data_received..................: 328 MB 2.0 MB/s
+     data_sent......................: 164 MB 990 kB/s
+     grpc_req_duration..............: avg=73.32ms  min=114.26µs med=741.11µs max=6.15s   p(90)=15.93ms p(95)=108.15ms
+     http_req_blocked...............: avg=2.76µs   min=348ns    med=1.74µs   max=65.76ms p(90)=3.06µs  p(95)=3.66µs
+     http_req_connecting............: avg=519ns    min=0s       med=0s       max=65.64ms p(90)=0s      p(95)=0s
+     http_req_duration..............: avg=110.53ms min=69.18µs  med=580.54µs max=1m0s    p(90)=2.47ms  p(95)=7.21ms
+       { expected_response:true }...: avg=34.78ms  min=208.64µs med=623.78µs max=40.67s  p(90)=2.93ms  p(95)=7.87ms
+     http_req_failed................: 15.05% ✓ 53828       ✗ 303779
+     http_req_receiving.............: avg=44.21µs  min=0s       med=29.14µs  max=51.06ms p(90)=58.74µs p(95)=78.73µs
+     http_req_sending...............: avg=12.84µs  min=2.48µs   med=9.4µs    max=26.9ms  p(90)=19.75µs p(95)=27.41µs
+     http_req_tls_handshaking.......: avg=0s       min=0s       med=0s       max=0s      p(90)=0s      p(95)=0s
+     http_req_waiting...............: avg=110.47ms min=54.14µs  med=534.52µs max=1m0s    p(90)=2.39ms  p(95)=7.13ms
+     http_reqs......................: 357607 2162.682726/s
+     iteration_duration.............: avg=12.2s    min=107.82ms med=6.93s    max=1m22s   p(90)=1m0s    p(95)=1m0s
+     iterations.....................: 1889   11.424015/s
+     vus............................: 1014   min=5         max=1199
+     vus_max........................: 1200   min=1200      max=1200
+
+
+running (2m45.4s), 0000/1200 VUs, 1889 complete and 1007 interrupted iterations
+default ✓ [======================================] 1006/1200 VUs  2m15s
+ulila@AzmiLL5Laptop:/dir/w3/HaloSusterTestCasesPSW3B2$
