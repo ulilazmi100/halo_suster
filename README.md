@@ -138,6 +138,9 @@ Besides the main folder, there is also an sqlx version available in the `halo_su
     BASE_URL=http://localhost:8080 make run-debug
     ```
 
+### Tests Result
+- My personal test results can be seen in the `test_results` folder
+
 ---
 
 ## Database Migration
